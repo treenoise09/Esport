@@ -14,6 +14,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import signin from '../photo/signin.jpg';
 
 import Breadcrumbs from '../component/CustomBreadcrumbs';
+import Footer from '../component/Footer';
+
+
 
 
 
@@ -46,6 +49,7 @@ export default function SignIn() {
 
 
     <ThemeProvider theme={defaultTheme}>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Breadcrumbs
         pages={[
           { title: "Home", path: "/" },
@@ -53,7 +57,7 @@ export default function SignIn() {
         ]}
       />
 
-      <Container component="main" maxWidth="xl" style={{ display: 'flex',justifyContent: 'center' }}>
+<Container component="main" maxWidth="xl" style={{ flex: 1 }}>
         <CssBaseline />
 
 
@@ -70,10 +74,10 @@ export default function SignIn() {
           </div>
           <div style={{ flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '120px' }}>
 
-            <div style={{ width: '100%' ,paddingLeft: '60px'}}>
+            <div style={{ width: '100%'}}>
               <Typography
                 component="h1"
-                variant="h5"
+                variant="h4"
                 align="left"
                 sx={{
                   color: '#ffffff'
@@ -139,8 +143,10 @@ export default function SignIn() {
                 type="submit"
                 fullWidth
                 variant="contained"
+                fontWeight="100%"
                 sx={{
                   mt: 3, mb: 2,
+                  fontWeight: 600,
                   backgroundColor: '#FF8C00',
                   '&:hover': {
                     bgcolor: '#B22222',
@@ -166,7 +172,8 @@ export default function SignIn() {
           </div>
         </Box>
       </Container>
-
+<Footer/>
+</div>
     </ThemeProvider>
   );
 }

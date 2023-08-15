@@ -15,8 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import signup from '../photo/signup.jpg';
 
 import Breadcrumbs from '../component/CustomBreadcrumbs';
-
-
+import Footer from '../component/Footer';
 
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -48,16 +47,17 @@ export default function SignUp() {
   return (
 
 
-    <ThemeProvider theme={defaultTheme}>
-      <Breadcrumbs
-        pages={[
-          { title: "Home", path: "/" },
-          { title: "Tournament", path: "/Tournament" },
-        ]}
-      />
-
-      <Container component="main" maxWidth="xl">
-        <CssBaseline />
+<ThemeProvider theme={defaultTheme}>
+            <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                <Breadcrumbs
+                    pages={[
+                        { title: "Home", path: "/" },
+                        { title: "Tournament", path: "/Tournament" },
+                    ]}
+                />
+                
+                <Container component="main" maxWidth="xl" style={{ flex: 1 }}>
+                    <CssBaseline />
         
 
         <Box
@@ -73,17 +73,19 @@ export default function SignUp() {
 </div>
 <div style={{flex: '1', display: 'flex', flexDirection: 'column', alignItems: 'center', padding:'20px'}}>
 
-
-          <Avatar sx={{ m: 4, bgcolor: '#FF8C00' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5"
-            sx={{
-              color: '#fff',
-            }}>
+<div style={{ width: '100%'}}>
+              <Typography
+                component="h1"
+                variant="h4"
+                align="left"
+                paddingLeft="15%"
+                sx={{
+                  color: '#ffffff'
+                }}>
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          </div>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }} style={{width:'70%'}}>
           <Grid container spacing={2}>
   <Grid item xs={12} sm={6}>
     <TextField
@@ -207,6 +209,9 @@ export default function SignUp() {
     />
   </Grid>
 </Grid>
+<div style={{color:'#fff'}}>
+  **รหัสผ่านจะต้องมีความยาว 8-16 ตัวอักษร คือ a-z, A-Z, 0-9 ผสมกัน**
+</div>
 
             <Button
               type="submit"
@@ -214,6 +219,7 @@ export default function SignUp() {
               variant="contained"
               sx={{
                 mt: 3, mb: 2,
+                fontWeight: 600,
                 backgroundColor: '#FF8C00',
                 '&:hover': {
                   bgcolor: '#B22222',
@@ -221,16 +227,15 @@ export default function SignUp() {
               }}
 
             >
-              Sign Up
+              Register
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent="center">
               <Grid item>
-                <Link href="/signin" variant="body2"
-                  sx={{
-                    color: '#FFF',
-                    textDecoration: 'underline',
-                  }}>
-                  Already have an account? Sign in
+                <Link href="/signin" variant="body2" sx={{ color: '#fff', textDecoration: 'none' }}>
+                {"Already have an account? "}
+                <span style={{ textDecoration: 'underline',color:'#FF8C00' }}>
+                   Sign in
+                   </span>
                 </Link>
               </Grid>
             </Grid>
@@ -239,6 +244,8 @@ export default function SignUp() {
         </Box>
 
       </Container>
+      <Footer/>
+      </div>
     </ThemeProvider>
   );
 }

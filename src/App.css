@@ -1,0 +1,16 @@
+
+body {
+ background-image: url(photo/aov1.png) ;
+ background-size: cover;
+ background-color: rgb(29, 28, 28);
+ background-position: center; /* เพิ่มบรรทัดนี้เพื่อให้รูปอยู่ตรงกลาง */
+
+ font-family: 'Prompt', sans-serif;
+
+
+
+}
+
+code {
+    font-family: 'Prompt', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  }

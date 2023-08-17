@@ -27,7 +27,7 @@ const matchValidation = [
  *         schema:
  *           $ref: '#/definitions/Match'
  *     responses:
- *       200:
+ *       201:
  *         description: Successfully created
  *         content:
  *            application/json:

@@ -28,7 +28,7 @@ const scheduleValidation = [
  *         schema:
  *           $ref: '#/definitions/Schedule'
  *     responses:
- *       200:
+ *       201:
  *         description: Successfully created
  *         content:
  *            application/json:

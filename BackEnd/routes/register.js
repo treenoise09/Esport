@@ -27,7 +27,7 @@ const registerValidation = [
  *         schema:
  *           $ref: '#/definitions/Register'
  *     responses:
- *       200:
+ *       201:
  *         description: Successfully created
  *         content:
  *            applicatino/json:
@@ -80,9 +80,7 @@ router.post("/", registerValidation, async (req, res) => {
  *         content:
  *            applicatino/json:
  *                 schema:
- *                      type: array
- *                      items:
- *                          $ref: '#/definitions/ResponseRegister'
+ *                    $ref: '#/definitions/ResponseRegisters'
  *       500:
  *         description: Server error
  *         content:
@@ -161,6 +159,18 @@ router.get("/:id", async (req, res) => {
  *     tags:
  *       - Register
  *     description: Update a specific register by ID
+ *     parameters:
+ *       - name: register_id
+ *         description: ID of the registration to update
+ *         in: path
+ *         required: true
+ *         type: integer
+ *       - name: registration
+ *         description: Registration object
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/Register'
  *     produces:
  *       - application/json
  *     responses:
@@ -219,6 +229,12 @@ router.put("/:id", registerValidation, async (req, res) => {
  *     tags:
  *       - Register
  *     description: Delete a specific register by ID
+ *     parameters:
+ *       - name: register_id
+ *         description: ID of the registration to delete
+ *         in: path
+ *         required: true
+ *         type: integer
  *     produces:
  *       - application/json
  *     responses:
@@ -275,6 +291,14 @@ router.delete("/:id", async (req, res) => {
  *         type: string
  *       data:
  *         $ref: '#/definitions/Register'
+*   ResponseRegisters:
+ *     properties:
+ *       message:
+ *         type: string
+ *       data:
+ *          type: array
+ *          items:
+ *              $ref: '#/definitions/Register'
  *   ResponseError:
  *      properties:
  *          message:

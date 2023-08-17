@@ -12,7 +12,7 @@ const matchValidation = [
 ];
 /**
  * @swagger
- * /match:
+ * /matches:
  *   post:
  *     tags:
  *       - Match
@@ -64,7 +64,7 @@ router.post('/', matchValidation, async (req, res) => {
 });
 /**
  * @swagger
- * /match:
+ * /matches:
  *   get:
  *     tags:
  *       - Match
@@ -77,9 +77,7 @@ router.post('/', matchValidation, async (req, res) => {
  *         content:
  *            application/json:
  *                 schema:
- *                     type: array
- *                     items:
- *                         $ref: '#/definitions/Match'
+ *                     $ref: '#/definitions/Match'
  *       500:
  *         description: Server error
  *         content:
@@ -99,7 +97,7 @@ router.get('/', async (req, res) => {
 });
 /**
  * @swagger
- * /match/{match_id}:
+ * /matches/{match_id}:
  *   get:
  *     tags:
  *       - Match
@@ -148,7 +146,7 @@ router.get('/:id', async (req, res) => {
 });
 /**
  * @swagger
- * /match/{match_id}:
+ * /matches/{match_id}:
  *   put:
  *     tags:
  *       - Match
@@ -210,7 +208,7 @@ router.put('/:id', matchValidation, async (req, res) => {
 });
 /**
  * @swagger
- * /match/{match_id}:
+ * /matches/{match_id}:
  *   delete:
  *     tags:
  *       - Match
@@ -276,6 +274,14 @@ router.delete('/:id', async (req, res) => {
  *         type: string
  *       data:
  *         $ref: '#/definitions/Match'
+ *   ResponseMatches:
+ *     properties:
+ *       message:
+ *         type: string
+ *       data:
+ *          type: array
+ *          items:
+ *              $ref: '#/definitions/Match'
  *   ResponseError:
  *      properties:
  *          message:

@@ -5,9 +5,9 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
-
+import BG from '../photo/tournament.jpg';
 import photo from '../photo/aov2.png';
-
+import Footer from '../component/Footer';
 import Breadcrumbs from '../component/CustomBreadcrumbs';
 
 
@@ -30,16 +30,20 @@ export default function Home() {
 
 
       <main>
+
         {/* Hero unit */}
         <Box
           sx={{
-            pt: 15,
+            pt: 12,
             pb: 25,
             width: '100%',
             height: '100%',
+            backgroundImage: `url(${BG})`,
+            backgroundSize:'cover',
           }}
         >
 
+          <div style={{ display: 'flex', justifyContent: 'center', fontWeight: 'bold', color: '#fff', fontSize: '4rem' }}>Tournament</div>
           <Container fixed>
             <Box
               sx={{
@@ -215,6 +219,7 @@ export default function Home() {
           </Container>
         </Box>
       </main>
+      <Footer/>
     </ThemeProvider>
   );
 }

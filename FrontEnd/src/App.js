@@ -8,6 +8,7 @@ import SignUp from './view/signup';
 import SignIn from './view/signin';
 import Tournament from './view/Tournament';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import TournamentDetails from "./view/TournamentDetails";
 
 
 const theme = createTheme({
@@ -31,6 +32,8 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/Tournament" element={<Tournament />} />
+        <Route path="/TournamentDetails" element={<TournamentDetails />} />
+        
 
         //componen
       

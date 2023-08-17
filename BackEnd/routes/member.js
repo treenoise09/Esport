@@ -7,10 +7,10 @@ const router = express.Router();
 
 /**
  * @swagger
- * /register:
+ * /members/register:
  *   post:
  *     tags:
- *       - Member
+ *       - Member Register
  *     description: Creates a new member
  *     produces:
  *       - application/json
@@ -20,7 +20,7 @@ const router = express.Router();
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/Member'
+ *           $ref: '#/definitions/RegisterMember'
  *     responses:
  *       201:
  *         description: User registered successfully!
@@ -70,10 +70,10 @@ router.post('/register', [
 
 /**
  * @swagger
- * /login:
+ * /members/login:
  *   post:
  *     tags:
- *       - Member
+ *       - Member Login
  *     description: Creates a new member
  *     produces:
  *       - application/json
@@ -83,7 +83,7 @@ router.post('/register', [
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/Member'
+ *           $ref: '#/definitions/LoginMember'
  *     responses:
  *       200:
  *         description: Login successful!
@@ -151,6 +151,28 @@ router.post('/login', async (req, res) => {
  *         type: boolean
  *       team_id:
  *         type: integer
+ *   RegisterMember:
+ *     properties:
+ *       username:
+ *         type: string
+ *       password:
+ *         type: string
+ *       name:
+ *         type: string
+ *       age:
+ *         type: integer
+ *       aka:
+ *         type: string
+ *       is_admin:
+ *         type: boolean
+ *       team_id:
+ *         type: integer
+ *   LoginMember:
+ *     properties:
+ *       username:
+ *         type: string
+ *       password:
+ *         type: string
  *   ResponseMember:
  *     properties:
  *       message:

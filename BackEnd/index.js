@@ -33,7 +33,7 @@ const specs = swaggerJsdoc(options);
 
 app.use(express.json()); // Middleware to parse JSON request bodies
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
-app.use(member)
+app.use('/members',member)
 app.use('/teams',team)
 app.use('/tournaments',tournament)
 app.use('/matches', match);

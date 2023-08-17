@@ -14,7 +14,7 @@ const port = 3000;
 
 const options = {
     definition: {
-      openapi: '3.0.0',
+      openapi: '3.0.2',
       info: {
         title: 'eSport Tournament API',
         version: '1.0.0',

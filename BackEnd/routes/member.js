@@ -22,7 +22,7 @@ const router = express.Router();
  *         schema:
  *           $ref: '#/definitions/Member'
  *     responses:
- *       200:
+ *       201:
  *         description: User registered successfully!
  *         content:
  *            application/json:

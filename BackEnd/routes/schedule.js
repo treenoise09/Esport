@@ -28,7 +28,7 @@ const scheduleValidation = [
  *         schema:
  *           $ref: '#/definitions/Schedule'
  *     responses:
- *       200:
+ *       201:
  *         description: Successfully created
  *         content:
  *            application/json:
@@ -63,7 +63,36 @@ router.post('/', scheduleValidation, async (req, res) => {
         res.status(500).send({message:'Server error'});
     }
 });
-
+/**
+ * @swagger
+ * /schedule:
+ *   get:
+ *     tags:
+ *       - Schedule
+ *     description: Get all schedules
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: schedule
+ *         description: Schedule object
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/Schedule'
+ *     responses:
+ *       200:
+ *         description: Get all schedules
+ *         content:
+ *            application/json:
+ *                 schema:
+ *                     $ref: '#/definitions/Schedules'
+ *       500:
+ *         description: Server error
+ *         content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/definitions/ResponseError'
+ */
 router.get('/', async (req, res) => {
     try {
         const conn = await pool.getConnection();
@@ -74,7 +103,41 @@ router.get('/', async (req, res) => {
         res.status(500).send({message:'Server error'});
     }
 });
-
+/**
+ * @swagger
+ * /schedule/{schedule_id}:
+ *   get:
+ *     tags:
+ *       - Schedule
+ *     description: Get a schedule
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: schedule_id
+ *         description: ID of the Schedule to retrieve
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: Get a specific schedule
+ *         content:
+ *            application/json:
+ *                 schema:
+ *                     $ref: '#/definitions/ResponseSchedule'
+ *       500:
+ *         description: Server error
+ *         content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/definitions/ResponseError'
+ *       404:
+ *         description: Schedule not found
+ *         content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/definitions/ResponseError'
+ */
 router.get('/:id', async (req, res) => {
     try {
         const conn = await pool.getConnection();
@@ -89,7 +152,53 @@ router.get('/:id', async (req, res) => {
         res.status(500).send({message:'Server error'});
     }
 });
-
+/**
+ * @swagger
+ * /schedule/{schedule_id}:
+ *   put:
+ *     tags:
+ *       - Schedule
+ *     description: Update a schedule
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: schedule_id
+ *         in: path
+ *         required: true
+ *         type: integer
+ *         description: ID of the Schedule to update
+ *       - name: schedule
+ *         description: Schedule object
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/Schedule'
+ *     responses:
+ *       200:
+ *         description: Schedule updated successfully!
+ *         content:
+ *            application/json:
+ *                 schema:
+ *                     $ref: '#/definitions/ResponseError'
+ *       500:
+ *         description: Server error
+ *         content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/definitions/ResponseError'
+ *       400:
+ *         description: Invalid request body
+ *         content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/definitions/ResponseError'
+ *       404:
+ *         description: Schedule not found
+ *         content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/definitions/ResponseError'
+ */
 router.put('/:id', scheduleValidation, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -110,7 +219,41 @@ router.put('/:id', scheduleValidation, async (req, res) => {
         res.status(500).send({message:'Server error'});
     }
 });
-
+/**
+ * @swagger
+ * /schedule/{schedule_id}:
+ *   delete:
+ *     tags:
+ *       - Schedule
+ *     description: Deletes a schedule
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: schedule_id
+ *         in: path
+ *         required: true
+ *         type: integer
+ *         description: ID of the Schedule to delete
+ *     responses:
+ *       200:
+ *         description: Schedule deleted successfully
+ *         content:
+ *            application/json:
+ *                 schema:
+ *                     $ref: '#/definitions/ResponseError'
+ *       500:
+ *         description: Server error
+ *         content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/definitions/ResponseError'
+ *       404:
+ *         description: Schedule not found
+ *         content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/definitions/ResponseError'
+ */
 router.delete('/:id', async (req, res) => {
     try {
         const conn = await pool.getConnection();
@@ -138,7 +281,7 @@ router.delete('/:id', async (req, res) => {
  *         type: string
  *       date_time:
  *         type: string
- *       format: date-time
+ *         format: date-time
  *       register_id:
  *         type: integer
  *   ResponseSchedule:
@@ -151,5 +294,11 @@ router.delete('/:id', async (req, res) => {
  *      properties:
  *          message:
  *              type: string
+ *   Schedules:
+ *         properties:
+ *              data:
+ *                  type: array
+ *                  items:
+ *                      $ref: '#/definitions/Schedule'
  */
 module.exports = router;

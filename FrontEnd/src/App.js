@@ -73,8 +73,6 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className={classes.screenContainer}>
         <Container className={classes.formContainer}>
-
-
         <BrowserRouter>
           <Routes>
             //view

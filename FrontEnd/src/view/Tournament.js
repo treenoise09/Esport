@@ -25,7 +25,7 @@ export default function Home() {
       <main>
         <Box
           sx={{
-            pt: 15,
+            pt: 12,
             pb: 25,
             width: "100%",
             height: "100%",
@@ -230,6 +230,7 @@ export default function Home() {
           </Container>
         </Box>
       </main>
+      <Footer/>
     </ThemeProvider>
   );
 }

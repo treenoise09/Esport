@@ -9,7 +9,14 @@ const tournamentValidation = [
     body('tour_name').isLength({ min: 3 }).withMessage('Tournament name must be at least 3 characters long'),
     body('tour_detail').isLength({ min: 10 }).withMessage('Tournament detail must be at least 10 characters long'),
     body('start_date').optional().isDate().withMessage('Start date must be a valid date'),
-    body('end_date').optional().isDate().withMessage('End date must be a valid date')
+    body('end_date').optional().isDate().withMessage('End date must be a valid date'),
+    body('team_number').isInt({ min: 2 }).withMessage('At least 2 teams should participate'),
+    body('win_condition').notEmpty().withMessage('Win condition is required'),
+    body('location').isLength({ min: 3 }).withMessage('Location must be at least 3 characters long'),
+    body('type').isIn(['LAN', 'Online']).withMessage('Tournament type must be either LAN or Online'),
+    body('game_name').isLength({ min: 3 }).withMessage('Game name must be at least 3 characters long'),
+
+
 ];
 
 /**
@@ -47,11 +54,11 @@ router.post('/', tournamentValidation, async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
-        await conn.query("INSERT INTO Tournament (tour_name, tour_detail, start_date, end_date) VALUES (?, ?, ?, ?)", 
-        [req.body.tour_name, req.body.tour_detail, req.body.start_date, req.body.end_date]);
+
+        await conn.query("INSERT INTO Tournament (tour_name, tour_detail, start_date, end_date, team_number, win_condition, location, type, game_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+        [req.body.tour_name, req.body.tour_detail, req.body.start_date, req.body.end_date, req.body.team_number, req.body.win_condition, req.body.location, req.body.type, req.body.game_name]);
         res.status(201).send({message:'Tournament created successfully!'});
     } catch (error) {
         console.error(error);
@@ -78,14 +85,17 @@ router.post('/', tournamentValidation, async (req, res) => {
  *         description: Server error
  */
 router.get('/', async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+
         const tournaments = await conn.query("SELECT * FROM Tournament");
         res.json({data:tournaments});
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
 
+    }finally {
+        conn.release();
     }
 });
 
@@ -119,8 +129,9 @@ router.get('/', async (req, res) => {
  *           $ref: '#/definitions/ResponseError'
  */
 router.get('/:id', async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+
         const tournament = await conn.query("SELECT * FROM Tournament WHERE tour_id = ?", [req.params.id]);
         if (tournament.length > 0) {
             res.json({data:tournament[0]});
@@ -131,6 +142,8 @@ router.get('/:id', async (req, res) => {
         console.error(error);
         res.status(500).send({message:'Server error'});
 
+    }finally {
+        conn.release();
     }
 });
 
@@ -174,11 +187,11 @@ router.put('/:id', tournamentValidation, async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
-        const result = await conn.query("UPDATE Tournament SET tour_name = ?, tour_detail = ?, start_date = ?, end_date = ? WHERE tour_id = ?", 
-        [req.body.tour_name, req.body.tour_detail, req.body.start_date, req.body.end_date, req.params.id]);
+
+        const result = await conn.query("UPDATE Tournament SET tour_name = ?, tour_detail = ?, start_date = ?, end_date = ?, team_number = ?, win_condition = ?, location = ?, type = ?, game_name = ?, status = ? WHERE tour_id = ?", 
+        [req.body.tour_name, req.body.tour_detail, req.body.start_date, req.body.end_date, req.body.team_number, req.body.win_condition, req.body.location, req.body.type, req.body.game_name, req.body.status, req.params.id]);
         if (result.affectedRows > 0) {
             res.send({message:'Tournament updated successfully!'});
         } else {
@@ -188,6 +201,8 @@ router.put('/:id', tournamentValidation, async (req, res) => {
         console.error(error);
         res.status(500).send({message:'Server error'});
 
+    }finally {
+        conn.release();
     }
 });
 
@@ -221,8 +236,9 @@ router.put('/:id', tournamentValidation, async (req, res) => {
  *           $ref: '#/definitions/ResponseError'
  */
 router.delete('/:id', async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+
         const result = await conn.query("DELETE FROM Tournament WHERE tour_id = ?", [req.params.id]);
         if (result.affectedRows > 0) {
             res.send({message:'Tournament deleted successfully!'});
@@ -233,6 +249,8 @@ router.delete('/:id', async (req, res) => {
         console.error(error);
         res.status(500).send({message:'Server error'});
 
+    }finally {
+        conn.release();
     }
 });
 
@@ -253,6 +271,22 @@ router.delete('/:id', async (req, res) => {
  *       end_date:
  *         type: string
  *         format: date
+ *       team_number:
+ *         type: integer
+ *         description: Number of teams that can participate in the tournament
+ *       win_condition:
+ *         type: string
+ *         description: Condition for winning the tournament (e.g., single elimination)
+ *       location:
+ *         type: string
+ *         description: Location where the tournament takes place
+ *       type:
+ *         type: string
+ *         enum: [LAN, Online]
+ *         description: Whether the tournament is LAN or Online
+ *       game_name:
+ *         type: string
+ *         description: Name of the game being played in the tournament
  *   ResponseTournament:
  *     properties:
  *       message:

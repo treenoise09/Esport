@@ -33,15 +33,42 @@ const router = express.Router();
  *                      $ref: '#/definitions/ResponseError'
  */
 router.post('/',[
-    body('team_name').notEmpty().withMessage('Team name is required')
+    body('team_name').notEmpty().withMessage('Team name is required'),
+    body('members').isArray().withMessage('Members should be an array')
 ], async (req,res) => {
+    const errors = validationResult(req);
+    const conn = await pool.getConnection();
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     try {
-        const conn = await pool.getConnection();
-        const result = await conn.query("INSERT INTO Team (team_name) VALUES (?)",[req.body.teamName])
-        res.status(201).send({message:'Team created successfully',data:result})
+        
+        await conn.beginTransaction();
+
+        // Insert team
+        const result = await conn.query("INSERT INTO Team (team_name) VALUES (?)", [req.body.team_name]);
+        const teamId = result.insertId;
+
+        // Update members
+        for (const username of req.body.members) {
+           
+            const user = await conn.query("SELECT * FROM Member WHERE username = ?", [username]);
+            if (user.length === 0) {
+                await conn.rollback();
+                return res.status(400).send({message: `Username ${username} not found`});
+            }
+            await conn.query("UPDATE Member SET team_id = ? WHERE username = ?", [teamId, username]);
+        }
+
+        await conn.commit();
+
+        res.status(201).send({message:'Team and members created successfully', teamId: teamId});
     } catch (error) {
+        await conn.rollback();
         console.error(error);
         res.status(500).send({message:'Server error'});
+    } finally {
+        conn.release();
     }
 })
 /**
@@ -66,13 +93,16 @@ router.post('/',[
  *                      $ref: '#/definitions/ResponseError'
  */
 router.get('/', async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+        
         const results = await conn.query("SELECT * FROM Team");
         res.send({ message: "All teams", data: results });
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: "Server error" });
+    }finally {
+        conn.release();
     }
 });
 
@@ -110,8 +140,9 @@ router.get('/', async (req, res) => {
  *                      $ref: '#/definitions/ResponseError'
  */
 router.get('/:id',async (req,res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+        
         const result = await conn.query("SELECT * FROM Team WHERE team_id = ?",[req.params.id])
         //Check if result is empty return 404 status code and message
         if (!result || !Array.isArray(result) || result.length === 0){
@@ -124,6 +155,8 @@ router.get('/:id',async (req,res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
+    }finally {
+        conn.release();
     }
 })
 
@@ -169,8 +202,9 @@ router.get('/:id',async (req,res) => {
 router.put('/:id', [
     body('team_name').notEmpty().withMessage('Team name is required')
 ], async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+        
         const result = await conn.query("UPDATE Team SET team_name = ? WHERE team_id = ?", [req.body.team_name, req.params.id]);
         if (result.affectedRows > 0) {
             res.send({ message: "Team updated successfully!" });
@@ -180,6 +214,8 @@ router.put('/:id', [
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: "Server error" });
+    }finally {
+        conn.release();
     }
 });
 
@@ -217,8 +253,9 @@ router.put('/:id', [
  *                      $ref: '#/definitions/ResponseError'
  */
 router.delete('/:id', async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+        
         const result = await conn.query("DELETE FROM Team WHERE team_id = ?", [req.params.id]);
         if (result.affectedRows > 0) {
             res.send({ message: "Team deleted successfully!" });
@@ -228,6 +265,8 @@ router.delete('/:id', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: "Server error" });
+    }finally {
+        conn.release();
     }
 });
 

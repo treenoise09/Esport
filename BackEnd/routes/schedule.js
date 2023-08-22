@@ -52,15 +52,17 @@ router.post('/', scheduleValidation, async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+        
         await conn.query("INSERT INTO Schedule (schedule_name, round, date_time, register_id) VALUES (?, ?, ?, ?)", 
         [req.body.schedule_name, req.body.round, req.body.date_time, req.body.register_id]);
         res.status(201).send({message:'Schedule created successfully!'});
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
+    }finally{
+        if (conn) conn.release()
     }
 });
 /**
@@ -94,13 +96,16 @@ router.post('/', scheduleValidation, async (req, res) => {
  *                      $ref: '#/definitions/ResponseError'
  */
 router.get('/', async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+
         const schedules = await conn.query("SELECT * FROM Schedule");
         res.json({data:schedules});
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
+    }finally{
+        if (conn) conn.release()
     }
 });
 /**
@@ -139,8 +144,9 @@ router.get('/', async (req, res) => {
  *                      $ref: '#/definitions/ResponseError'
  */
 router.get('/:id', async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+
         const schedule = await conn.query("SELECT * FROM Schedule WHERE schedule_id = ?", [req.params.id]);
         if (schedule.length > 0) {
             res.json({data:schedule[0]});
@@ -150,6 +156,8 @@ router.get('/:id', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
+    }finally{
+        if (conn) conn.release()
     }
 });
 /**
@@ -204,9 +212,10 @@ router.put('/:id', scheduleValidation, async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
+    const conn = await pool.getConnection();
 
     try {
-        const conn = await pool.getConnection();
+
         const result = await conn.query("UPDATE Schedule SET schedule_name = ?, round = ?, date_time = ?, register_id = ? WHERE schedule_id = ?", 
         [req.body.schedule_name, req.body.round, req.body.date_time, req.body.register_id, req.params.id]);
         if (result.affectedRows > 0) {
@@ -217,6 +226,8 @@ router.put('/:id', scheduleValidation, async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
+    }finally{
+        if (conn) conn.release()
     }
 });
 /**
@@ -255,8 +266,9 @@ router.put('/:id', scheduleValidation, async (req, res) => {
  *                      $ref: '#/definitions/ResponseError'
  */
 router.delete('/:id', async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+
         const result = await conn.query("DELETE FROM Schedule WHERE schedule_id = ?", [req.params.id]);
         if (result.affectedRows > 0) {
             res.send({message:'Schedule deleted successfully!'});
@@ -266,6 +278,8 @@ router.delete('/:id', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
+    }finally{
+        if (conn) conn.release()
     }
 });
 /**

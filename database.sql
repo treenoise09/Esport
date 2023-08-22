@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `esport` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `esport`;
 -- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: localhost    Database: esport
@@ -18,6 +16,29 @@ USE `esport`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `games`
+--
+
+DROP TABLE IF EXISTS `games`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `games` (
+  `game_id` int NOT NULL AUTO_INCREMENT,
+  `game_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`game_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `games`
+--
+
+LOCK TABLES `games` WRITE;
+/*!40000 ALTER TABLE `games` DISABLE KEYS */;
+/*!40000 ALTER TABLE `games` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `match_db`
 --
 
@@ -30,10 +51,16 @@ CREATE TABLE `match_db` (
   `team1_score` int NOT NULL,
   `team2_score` int NOT NULL,
   `schedule_id` int NOT NULL,
+  `team1_id` int DEFAULT NULL,
+  `team2_id` int DEFAULT NULL,
   PRIMARY KEY (`match_id`),
   KEY `schedule_id` (`schedule_id`),
+  KEY `fk_team1` (`team1_id`),
+  KEY `fk_team2` (`team2_id`),
+  CONSTRAINT `fk_team1` FOREIGN KEY (`team1_id`) REFERENCES `team` (`team_id`),
+  CONSTRAINT `fk_team2` FOREIGN KEY (`team2_id`) REFERENCES `team` (`team_id`),
   CONSTRAINT `match_db_ibfk_1` FOREIGN KEY (`schedule_id`) REFERENCES `schedule` (`schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,13 +88,13 @@ CREATE TABLE `member` (
   `aka` varchar(50) NOT NULL,
   `role` enum('USER','ADMIN') NOT NULL,
   `email` varchar(100) NOT NULL,
-  `team_id` int NOT NULL,
+  `team_id` int DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`member_id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
-  KEY `team_id` (`team_id`),
+  KEY `member_ibfk_1` (`team_id`),
   CONSTRAINT `member_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -78,7 +105,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'john_doe','$2a$10$ljNkI8xjlaA9/dflzMDNIe0U8jLR3y.T38GbY0SVK/SkPwkoK8g5e','John Doe','1995-06-15','jD','USER','john.doe@example.com',1,'2023-08-15 04:37:46','2023-08-15 04:37:46');
+INSERT INTO `member` VALUES (1,'john_doe','$2a$10$ljNkI8xjlaA9/dflzMDNIe0U8jLR3y.T38GbY0SVK/SkPwkoK8g5e','John Doe','1995-06-15','jD','USER','john.doe@example.com',9,'2023-08-15 04:37:46','2023-08-21 09:57:19');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,7 +128,7 @@ CREATE TABLE `register` (
   KEY `tour_id` (`tour_id`),
   CONSTRAINT `register_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `register_ibfk_2` FOREIGN KEY (`tour_id`) REFERENCES `tournament` (`tour_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -130,7 +157,7 @@ CREATE TABLE `schedule` (
   PRIMARY KEY (`schedule_id`),
   KEY `register_id` (`register_id`),
   CONSTRAINT `schedule_ibfk_1` FOREIGN KEY (`register_id`) REFERENCES `register` (`register_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,7 +183,7 @@ CREATE TABLE `team` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`team_id`),
   UNIQUE KEY `team_name` (`team_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,7 +192,7 @@ CREATE TABLE `team` (
 
 LOCK TABLES `team` WRITE;
 /*!40000 ALTER TABLE `team` DISABLE KEYS */;
-INSERT INTO `team` VALUES (1,'GGEZ','2023-08-15 04:37:08','2023-08-15 04:37:08');
+INSERT INTO `team` VALUES (1,'GGEZ','2023-08-15 04:37:08','2023-08-15 04:37:08'),(7,'eserrer','2023-08-21 09:54:16','2023-08-21 09:54:16'),(9,'Tetstsetset','2023-08-21 09:57:19','2023-08-21 09:57:19');
 /*!40000 ALTER TABLE `team` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,13 +207,19 @@ CREATE TABLE `tournament` (
   `tour_id` int NOT NULL AUTO_INCREMENT,
   `tour_name` varchar(50) NOT NULL,
   `tour_detail` varchar(255) NOT NULL,
-  `start_date` date DEFAULT NULL,
-  `end_date` date DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `team_number` int NOT NULL,
+  `win_condition` varchar(45) NOT NULL,
+  `location` varchar(45) DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `type` enum('LAN','Online') NOT NULL DEFAULT 'Online',
+  `game_name` varchar(255) NOT NULL,
+  `status` enum('Pending','Ongoing','End') DEFAULT 'Pending',
   PRIMARY KEY (`tour_id`),
   UNIQUE KEY `tour_name` (`tour_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -195,6 +228,7 @@ CREATE TABLE `tournament` (
 
 LOCK TABLES `tournament` WRITE;
 /*!40000 ALTER TABLE `tournament` DISABLE KEYS */;
+INSERT INTO `tournament` VALUES (3,'Test123s','Rwadasd56156841864961','2023-08-18','2023-08-28',5,'Single Elimination','Somewhere','2023-08-22 07:42:53','2023-08-21 06:04:13','Online','rov','Pending');
 /*!40000 ALTER TABLE `tournament` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -207,4 +241,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-17 13:57:50
+-- Dump completed on 2023-08-22 17:33:19

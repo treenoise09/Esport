@@ -7,8 +7,11 @@ const router = express.Router();
 // Middleware for input validation for creating/updating a match
 const matchValidation = [
     body('result').notEmpty().withMessage('Result is required'),
-    body('score').notEmpty().withMessage('Score is required'),
-    body('schedule_id').isInt().withMessage('Schedule ID must be a valid integer')
+    body('schedule_id').isInt().withMessage('Schedule ID must be a valid integer'),
+    body('team1_id').isInt().withMessage('Team 1 ID must be a valid integer'),
+    body('team1_score').isInt().withMessage('Team 1 Score must be a valid integer'),
+    body('team2_id').isInt().withMessage('Team 2 ID must be a valid integer'),
+    body('team2_score').isInt().withMessage('Team 2 Score must be a valid integer'),
 ];
 /**
  * @swagger
@@ -51,15 +54,17 @@ router.post('/', matchValidation, async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
-        await conn.query("INSERT INTO Match_db (result, score, schedule_id) VALUES (?, ?, ?)", 
-        [req.body.result, req.body.score, req.body.schedule_id]);
+       
+        await conn.query("INSERT INTO Match_db (result, schedule_id, team1_id, team1_score, team2_id, team2_score) VALUES (?, ?, ?, ?, ?, ?)", 
+        [req.body.result, req.body.schedule_id, req.body.team1_id, req.body.team1_score, req.body.team2_id, req.body.team2_score]);
         res.status(201).send({message:'Match created successfully!'});
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
+    }finally {
+        if (conn) conn.release();  // Ensure connection is released
     }
 });
 /**
@@ -86,13 +91,15 @@ router.post('/', matchValidation, async (req, res) => {
  *                      $ref: '#/definitions/ResponseError'
  */
 router.get('/', async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
         const matches = await conn.query("SELECT * FROM Match_db");
         res.json({data:matches});
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
+    }finally {
+        if (conn) conn.release();  // Ensure connection is released
     }
 });
 /**
@@ -131,8 +138,9 @@ router.get('/', async (req, res) => {
  *                      $ref: '#/definitions/ResponseError'
  */
 router.get('/:id', async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+        
         const match = await conn.query("SELECT * FROM Match_db WHERE match_id = ?", [req.params.id]);
         if (match.length > 0) {
             res.json(match[0]);
@@ -142,6 +150,8 @@ router.get('/:id', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
+    }finally {
+        if (conn) conn.release();  // Ensure connection is released
     }
 });
 /**
@@ -187,15 +197,16 @@ router.get('/:id', async (req, res) => {
  */
 
 router.put('/:id', matchValidation, async (req, res) => {
+
     const errors = validationResult(req);
+    const conn = await pool.getConnection();
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
     try {
-        const conn = await pool.getConnection();
-        const result = await conn.query("UPDATE Match_db SET result = ?, score = ?, schedule_id = ? WHERE match_id = ?", 
-        [req.body.result, req.body.score, req.body.schedule_id, req.params.id]);
+        const result = await conn.query("UPDATE Match_db SET result = ?, schedule_id = ?, team1_id = ?, team1_score = ?, team2_id = ?, team2_score = ? WHERE match_id = ?", 
+        [req.body.result, req.body.schedule_id, req.body.team1_id, req.body.team1_score, req.body.team2_id, req.body.team2_score, req.params.id]);
         if (result.affectedRows > 0) {
             res.send({message:'Match updated successfully!'});
         } else {
@@ -204,6 +215,8 @@ router.put('/:id', matchValidation, async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
+    }finally {
+        if (conn) conn.release();  // Ensure connection is released
     }
 });
 /**
@@ -242,8 +255,8 @@ router.put('/:id', matchValidation, async (req, res) => {
  *                      $ref: '#/definitions/ResponseError'
  */
 router.delete('/:id', async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
         const result = await conn.query("DELETE FROM Match_db WHERE match_id = ?", [req.params.id]);
         if (result.affectedRows > 0) {
             res.send({message:'Match deleted successfully!'});
@@ -253,6 +266,8 @@ router.delete('/:id', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
+    }finally {
+        if (conn) conn.release();  // Ensure connection is released
     }
 });
 /**
@@ -264,9 +279,15 @@ router.delete('/:id', async (req, res) => {
  *         type: integer
  *       result:
  *         type: string
- *       score:
- *         type: string
  *       schedule_id:
+ *         type: integer
+ *       team1_id:
+ *         type: integer
+ *       team1_score:
+ *         type: integer
+ *       team2_id:
+ *         type: integer
+ *       team2_score:
  *         type: integer
  *   ResponseMatch:
  *     properties:

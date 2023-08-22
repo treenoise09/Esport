@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors')
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 
@@ -10,7 +11,8 @@ const schedule = require('./routes/schedule');
 const register = require('./routes/register');
 
 const app = express();
-const port = 3000;
+const port = 4000;
+
 
 const options = {
     definition: {
@@ -30,7 +32,7 @@ const options = {
   };
 
 const specs = swaggerJsdoc(options);
-
+app.use(cors({ origin: 'http://localhost:3000', credentials : true }));
 app.use(express.json()); // Middleware to parse JSON request bodies
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/members',member)

@@ -49,22 +49,23 @@ router.post('/register', [
     body('aka').notEmpty().withMessage('AKA is required'),
     body('role').isIn(['USER', 'ADMIN']).withMessage('Role must be either USER or ADMIN'),
     body('email').isEmail().normalizeEmail().withMessage('Email must be valid'),
-    body('team_id').optional().isInt().withMessage('Team ID must be a valid integer'),
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ message: errors.array() });
     }
-
+    const conn = await pool.getConnection();
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const conn = await pool.getConnection();
+
         await conn.query("INSERT INTO Member (username, password, name, date_of_birth, aka, role, email, team_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
         [req.body.username, hashedPassword, req.body.name, req.body.date_of_birth, req.body.aka, req.body.role, req.body.email, req.body.team_id]);
         res.status(201).send({message:'User registered successfully!'});
     } catch (error) {
         console.error(error);
         res.status(500).send({message:'Server error'});
+    }finally {
+        if (conn) conn.release();  // Ensure connection is released
     }
 });
 
@@ -111,8 +112,9 @@ router.post('/register', [
  *                      $ref: '#/definitions/ResponseError'
  */
 router.post('/login', async (req, res) => {
+    const conn = await pool.getConnection();
     try {
-        const conn = await pool.getConnection();
+
         const result = await conn.query("SELECT * FROM Member WHERE username = ?", [req.body.username]);
         if (result.length > 0) {
             const user = result[0];
@@ -128,8 +130,73 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('Server error');
+    }finally {
+        if (conn) conn.release();  // Ensure connection is released
     }
 });
+
+router.get('/', async (req, res) => {
+    const conn = await pool.getConnection();
+    try {
+
+        const members = await conn.query("SELECT * FROM Member");
+        res.json({data: members});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({message:'Server error'});
+    }finally {
+        if (conn) conn.release();  // Ensure connection is released
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    const conn = await pool.getConnection();
+    try {
+
+        const member = await conn.query("SELECT * FROM Member WHERE member_id = ?", [req.params.id]);
+        if (member.length > 0) {
+            res.json(member[0]);
+        } else {
+            res.status(404).send({message: 'Member not found'});
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({message:'Server error'});
+    }finally {
+        if (conn) conn.release();  // Ensure connection is released
+    }
+});
+
+router.put('/:id', async (req, res) => {
+    const conn = await pool.getConnection();
+    try {
+
+        await conn.query("UPDATE Member SET username = ?, name = ?, date_of_birth = ?, aka = ?, role = ?, email = ?, team_id = ? WHERE member_id = ?", 
+        [req.body.username, req.body.name, req.body.date_of_birth, req.body.aka, req.body.role, req.body.email, req.body.team_id, req.params.id]);
+        res.send({message: 'Member updated successfully!'});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({message:'Server error'});
+    }finally {
+        if (conn) conn.release();  // Ensure connection is released
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    const conn = await pool.getConnection();
+    try {
+
+        await conn.query("DELETE FROM Member WHERE member_id = ?", [req.params.id]);
+        res.send({message: 'Member deleted successfully!'});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({message:'Server error'});
+    }finally {
+        if (conn) conn.release();  // Ensure connection is released
+    }
+});
+
+
 /**
  * @swagger
  * definitions:

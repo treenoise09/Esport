@@ -217,9 +217,10 @@ CREATE TABLE `tournament` (
   `type` enum('LAN','Online') NOT NULL DEFAULT 'Online',
   `game_name` varchar(255) NOT NULL,
   `status` enum('Pending','Ongoing','End') DEFAULT 'Pending',
+  `regis_end` date DEFAULT NULL,
   PRIMARY KEY (`tour_id`),
   UNIQUE KEY `tour_name` (`tour_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,7 +229,7 @@ CREATE TABLE `tournament` (
 
 LOCK TABLES `tournament` WRITE;
 /*!40000 ALTER TABLE `tournament` DISABLE KEYS */;
-INSERT INTO `tournament` VALUES (3,'Test123s','Rwadasd56156841864961','2023-08-18','2023-08-28',5,'Single Elimination','Somewhere','2023-08-22 07:42:53','2023-08-21 06:04:13','Online','rov','Pending');
+INSERT INTO `tournament` VALUES (3,'Test123s','Rwadasd56156841864961','2023-08-18','2023-08-28',5,'Single Elimination','Somewhere','2023-08-23 11:21:25','2023-08-21 06:04:13','Online','rov','Pending','2023-08-28'),(4,'Test123ss','Rwadasd56156841864961','2023-08-18','2023-08-28',5,'Single Elimination','Somewhere','2023-08-23 11:21:25','2023-08-21 06:04:13','Online','rov','Pending','2023-08-28'),(5,'Test123sss','Rwadasd56156841864961','2023-08-18','2023-08-28',5,'Single Elimination','Somewhere','2023-08-23 11:21:25','2023-08-21 06:04:13','Online','rov','Pending','2023-08-28'),(6,'Test123ssss','Rwadasd56156841864961','2023-08-18','2023-08-28',5,'Single Elimination','Somewhere','2023-08-23 11:21:25','2023-08-21 06:04:13','Online','rov','Pending','2023-08-28');
 /*!40000 ALTER TABLE `tournament` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -241,4 +242,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-22 17:33:19
+-- Dump completed on 2023-08-23 19:30:30

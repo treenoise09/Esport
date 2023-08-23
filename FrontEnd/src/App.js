@@ -15,6 +15,9 @@ import MemberAdmin from "./view/admin/MemberAdmin";
 import { makeStyles } from "@mui/styles";
 import { Container } from "@mui/system";
 import ScheduleMainPage from "./view/admin/ScheduleMainPage";
+import Footer from "./component/Footer";
+import { AppBar } from "@mui/material";
+import CustomBreadcrumbs from "./component/CustomBreadcrumbs";
 
 const useStyles = makeStyles({
   screenContainer: {
@@ -66,33 +69,45 @@ const theme = createTheme({
 //component
 
 //admin
-
-function App() {
+function AdminRoutes() {
   const classes = useStyles();
   return (
+    <div className={classes.screenContainer}>
+      <Container className={classes.formContainer}>
+        <Routes>
+          <Route path="Match" element={<Match />} />
+          <Route path="Tournament" element={<TournamentAdmin />} />
+          <Route path="Team/create" element={<CreateTeam />} />
+          <Route path="Member" element={<MemberAdmin />} />
+          <Route path="Shedule" element={<ScheduleMainPage />} />
+        </Routes>
+      </Container>
+    </div>
+  );
+}
+function MemberRoute() {
+  return (
+        <Routes>
+          <Route path="/Tournament" element={<Tournament />} />
+        </Routes>
+  );
+}
+function App() {
+  return (
     <ThemeProvider theme={theme}>
-      <div className={classes.screenContainer}>
-        <Container className={classes.formContainer}>
-        <BrowserRouter>
-          <Routes>
-            //view
-            <Route path="/" element={<Home />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/Tournament" element={<Tournament />} />
-            // Admin routes nested under /admin
-            <Route path="/admin">
-              <Route path="Match" element={<Match />} />
-              <Route path="Tournament" element={<TournamentAdmin />} />
-              <Route path="Team/create" element={<CreateTeam />} />
-              <Route path="Member" element={<MemberAdmin />} />
-              <Route path="Shedule" element={<ScheduleMainPage/>}/>
-            </Route>
-          </Routes>
-          
-        </BrowserRouter>
-        </Container>
-      </div>
+      <BrowserRouter>
+        <Routes>
+          //view
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/Tournament" element={<Tournament />} />
+          // Admin routes nested under /admin
+          <Route path="/admin/*" element={<AdminRoutes />} />
+          <Route path="/member/*" element={<MemberRoute />} />
+        </Routes>
+      </BrowserRouter>
+      <Footer/>
     </ThemeProvider>
   );
 }

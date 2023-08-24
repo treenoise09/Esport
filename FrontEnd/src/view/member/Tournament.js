@@ -3,9 +3,9 @@ import { ThemeProvider, createTheme, Box, Card, CardContent, CardMedia, Containe
 
 import { Link } from "react-router-dom";
 
-import photo from "../photo/aov2.png";
-import Breadcrumbs from "../component/CustomBreadcrumbs";
-import tournamentAPI from "../apis/tournamentAPI";
+import photo from "../../photo/aov2.png";
+import Breadcrumbs from "../../component/CustomBreadcrumbs";
+import tournamentAPI from "../../apis/tournamentAPI";
 
 const theme = createTheme();
 
@@ -48,9 +48,10 @@ export default function Home() {
       />
      <main style={{padding:'10%'}}>
         <Container fixed>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', maxWidth: 1600 }}>
             {tournaments?.map((tournament) => (
-              <Card key={tournament.id} sx={{ width: 400, position: 'relative' }}>
+              <Card key={tournament.tour_id} sx={{ width: 300, position: 'relative' }}>
+
                 <CardMedia
                   component="img"
                   height="140"
@@ -71,7 +72,7 @@ export default function Home() {
                 </CardContent>
                 <Box
                   component={Link}
-                  to={`/tournament/${tournament.id}`}
+                  to={`/member/Tournament/${tournament.tour_id}`}
                   sx={{
                     position: 'absolute',
                     top: 0,

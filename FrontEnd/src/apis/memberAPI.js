@@ -22,6 +22,7 @@ const memberAPI = {
           throw error;
         }
       },
+
     
       registerMember: async (memberData) => {
         try {

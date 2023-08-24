@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./view/Home";
 import SignUp from "./view/signup";
 import SignIn from "./view/signin";
-import Tournament from "./view/Tournament";
+import Tournament from "./view/member/Tournament";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TournamentAdmin from "./view/admin/TournamentAdmin";
 import CreateTeam from "./view/admin/CreateTeam";
@@ -18,6 +18,7 @@ import ScheduleMainPage from "./view/admin/ScheduleMainPage";
 import Footer from "./component/Footer";
 import { AppBar } from "@mui/material";
 import CustomBreadcrumbs from "./component/CustomBreadcrumbs";
+import TournamentDetails from "./view/member/TournamentDetails";
 
 const useStyles = makeStyles({
   screenContainer: {
@@ -87,27 +88,33 @@ function AdminRoutes() {
 }
 function MemberRoute() {
   return (
-        <Routes>
-          <Route path="/Tournament" element={<Tournament />} />
-        </Routes>
+    <Routes>
+      <Route path="/Tournament" element={<Tournament />} />
+      <Route path="/Tournament/:id" element={<TournamentDetails />} />
+    </Routes>
   );
 }
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          //view
-          <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/Tournament" element={<Tournament />} />
-          // Admin routes nested under /admin
-          <Route path="/admin/*" element={<AdminRoutes />} />
-          <Route path="/member/*" element={<MemberRoute />} />
-        </Routes>
-      </BrowserRouter>
-      <Footer/>
+      <div
+        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
+        <BrowserRouter>
+          <Routes>
+            //view
+            <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/Tournament" element={<Tournament />} />
+            // Admin routes nested under /admin
+            <Route path="/admin/*" element={<AdminRoutes />} />
+            <Route path="/member/*" element={<MemberRoute />} />
+          </Routes>
+        </BrowserRouter>
+        <div style={{ flexGrow: 1 }}></div>
+        <Footer />
+      </div>
     </ThemeProvider>
   );
 }

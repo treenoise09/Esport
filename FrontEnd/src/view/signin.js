@@ -49,6 +49,7 @@ export default function SignIn() {
           pages={[
             { title: "Home", path: "/" },
             { title: "Tournament", path: "/Tournament" },
+            { title: "TournamentSchedule", path: "/TournamentSchedule" },
           ]}
         />
 

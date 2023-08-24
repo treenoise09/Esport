@@ -51,9 +51,8 @@ router.post("/", registerValidation, async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ message: errors.array() });
   }
-
+  const conn = await pool.getConnection();
   try {
-    const conn = await pool.getConnection();
     await conn.query("INSERT INTO Register (team_id, tour_id) VALUES (?, ?)", [
       req.body.team_id,
       req.body.tour_id,
@@ -62,6 +61,8 @@ router.post("/", registerValidation, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Server error" });
+  } finally {
+    if (conn) conn.release(); // Ensure connection is released
   }
 });
 
@@ -89,13 +90,15 @@ router.post("/", registerValidation, async (req, res) => {
  *                      $ref: '#/definitions/ResponseError'
  */
 router.get("/", async (req, res) => {
+  const conn = await pool.getConnection();
   try {
-    const conn = await pool.getConnection();
     const registrations = await conn.query("SELECT * FROM Register");
     res.json({ data: registrations });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Server error" });
+  } finally {
+    if (conn) conn.release(); // Ensure connection is released
   }
 });
 
@@ -135,8 +138,8 @@ router.get("/", async (req, res) => {
  *                      $ref: '#/definitions/ResponseError'
  */
 router.get("/:id", async (req, res) => {
+  const conn = await pool.getConnection();
   try {
-    const conn = await pool.getConnection();
     const registration = await conn.query(
       "SELECT * FROM Register WHERE register_id = ?",
       [req.params.id]
@@ -149,6 +152,8 @@ router.get("/:id", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Server error" });
+  } finally {
+    if (conn) conn.release(); // Ensure connection is released
   }
 });
 
@@ -204,9 +209,8 @@ router.put("/:id", registerValidation, async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ message: errors.array() });
   }
-
+  const conn = await pool.getConnection();
   try {
-    const conn = await pool.getConnection();
     const result = await conn.query(
       "UPDATE Register SET team_id = ?, tour_id = ? WHERE register_id = ?",
       [req.body.team_id, req.body.tour_id, req.params.id]
@@ -219,6 +223,8 @@ router.put("/:id", registerValidation, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Server error" });
+  } finally {
+    if (conn) conn.release(); // Ensure connection is released
   }
 });
 
@@ -258,8 +264,8 @@ router.put("/:id", registerValidation, async (req, res) => {
  *                      $ref: '#/definitions/ResponseError'
  */
 router.delete("/:id", async (req, res) => {
+  const conn = await pool.getConnection();
   try {
-    const conn = await pool.getConnection();
     const result = await conn.query(
       "DELETE FROM Register WHERE register_id = ?",
       [req.params.id]
@@ -272,6 +278,8 @@ router.delete("/:id", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Server error" });
+  } finally {
+    if (conn) conn.release(); // Ensure connection is released
   }
 });
 /**
@@ -291,7 +299,7 @@ router.delete("/:id", async (req, res) => {
  *         type: string
  *       data:
  *         $ref: '#/definitions/Register'
-*   ResponseRegisters:
+ *   ResponseRegisters:
  *     properties:
  *       message:
  *         type: string

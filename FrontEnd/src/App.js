@@ -19,6 +19,7 @@ import Footer from "./component/Footer";
 import { AppBar } from "@mui/material";
 import CustomBreadcrumbs from "./component/CustomBreadcrumbs";
 import TournamentDetails from "./view/member/TournamentDetails";
+import Profile from "./view/member/Profile";
 
 const useStyles = makeStyles({
   screenContainer: {
@@ -87,11 +88,17 @@ function AdminRoutes() {
   );
 }
 function MemberRoute() {
+  const classes = useStyles();
   return (
+    <div className={classes.screenContainer}>
+    <Container className={classes.formContainer}>
     <Routes>
       <Route path="/Tournament" element={<Tournament />} />
       <Route path="/Tournament/:id" element={<TournamentDetails />} />
+      <Route path="/Profile/:id" element={<Profile />} />
     </Routes>
+    </Container>
+    </div>
   );
 }
 function App() {

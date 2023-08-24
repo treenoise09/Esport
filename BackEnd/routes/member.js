@@ -45,10 +45,8 @@ router.post('/register', [
     body('username').isLength({ min: 3 }).withMessage('Username must be at least 3 characters long'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
     body('name').notEmpty().withMessage('Name is required'),
-    body('date_of_birth').isDate().withMessage('Date of birth must be a valid date'),
     body('aka').notEmpty().withMessage('AKA is required'),
     body('role').isIn(['USER', 'ADMIN']).withMessage('Role must be either USER or ADMIN'),
-    body('email').isEmail().normalizeEmail().withMessage('Email must be valid'),
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -58,8 +56,8 @@ router.post('/register', [
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-        await conn.query("INSERT INTO Member (username, password, name, date_of_birth, aka, role, email, team_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
-        [req.body.username, hashedPassword, req.body.name, req.body.date_of_birth, req.body.aka, req.body.role, req.body.email, req.body.team_id]);
+        await conn.query("INSERT INTO Member (username, password, name, aka, role, team_id) VALUES (?, ?, ?, ?, ?, ?)", 
+        [req.body.username, hashedPassword, req.body.name, req.body.aka, req.body.role, req.body.team_id]);
         res.status(201).send({message:'User registered successfully!'});
     } catch (error) {
         console.error(error);
@@ -171,8 +169,8 @@ router.put('/:id', async (req, res) => {
     const conn = await pool.getConnection();
     try {
 
-        await conn.query("UPDATE Member SET username = ?, name = ?, date_of_birth = ?, aka = ?, role = ?, email = ?, team_id = ? WHERE member_id = ?", 
-        [req.body.username, req.body.name, req.body.date_of_birth, req.body.aka, req.body.role, req.body.email, req.body.team_id, req.params.id]);
+        await conn.query("UPDATE Member SET username = ?, name = ?, aka = ?, role = ?, team_id = ? WHERE member_id = ?", 
+        [req.body.username, req.body.name, req.body.aka, req.body.role, req.body.team_id, req.params.id]);
         res.send({message: 'Member updated successfully!'});
     } catch (error) {
         console.error(error);

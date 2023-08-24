@@ -8,7 +8,7 @@ import {
   InputLabel,
 } from "@mui/material";
 
-function MemberForm({ onSubmit, initialData }) {
+function MemberForm({ onSubmit, initialData, isAdmin }) {
   const [formData, setFormData] = useState(
     initialData || {
       username: "",
@@ -62,19 +62,6 @@ function MemberForm({ onSubmit, initialData }) {
         required
       />
       <TextField
-        name="date_of_birth"
-        label="Date of Birth"
-        margin="normal"
-        type="date"
-        value={formData.date_of_birth}
-        onChange={handleChange}
-        fullWidth
-        InputLabelProps={{
-          shrink: true,
-        }}
-        required
-      />
-      <TextField
         label="AKA"
         name="aka"
         margin="normal"
@@ -83,36 +70,31 @@ function MemberForm({ onSubmit, initialData }) {
         required
         fullWidth
       />
-      <FormControl fullWidth variant="outlined" required margin="normal">
-        <InputLabel>Role</InputLabel>
-        <Select
-          name="role"
-          value={formData.role}
+      {isAdmin ? (
+        <FormControl fullWidth variant="outlined" required margin="normal">
+          <InputLabel>Role</InputLabel>
+          <Select
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            required
+          >
+            <MenuItem value="ADMIN">ADMIN</MenuItem>
+            <MenuItem value="USER">USER</MenuItem>
+          </Select>
+        </FormControl>
+      ) : null}
+      {isAdmin ? (
+        <TextField
+          label="Team ID"
+          name="team_id"
+          margin="normal"
+          fullWidth
+          value={formData.team_id}
           onChange={handleChange}
           required
-        >
-          <MenuItem value="ADMIN">ADMIN</MenuItem>
-          <MenuItem value="USER">USER</MenuItem>
-        </Select>
-      </FormControl>
-      <TextField
-        name="email"
-        label="Email"
-        margin="normal"
-        value={formData.email}
-        onChange={handleChange}
-        fullWidth
-        required
-      />
-      <TextField
-        label="Team ID"
-        name="team_id"
-        margin="normal"
-        fullWidth
-        value={formData.team_id}
-        onChange={handleChange}
-        required
-      />
+        />
+      ) : null}
       <Button
         type="submit"
         variant="contained"

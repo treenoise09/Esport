@@ -48,7 +48,7 @@ function MemberAdmin() {
   return (
     <Container>
       <h1>Member Admin</h1>
-      <MemberForm key={selectedMember ? selectedMember.member_id : 'create'} onSubmit={handleFormSubmit} initialData={selectedMember} />
+      <MemberForm key={selectedMember ? selectedMember.member_id : 'create'} onSubmit={handleFormSubmit} initialData={selectedMember} isAdmin={true} />
       <MemberList
         members={members}
         onEdit={setSelectedMember}

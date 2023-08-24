@@ -18,6 +18,8 @@ import ScheduleMainPage from "./view/admin/ScheduleMainPage";
 import Footer from "./component/Footer";
 import { AppBar } from "@mui/material";
 import CustomBreadcrumbs from "./component/CustomBreadcrumbs";
+import TournamentDetails from "./view/TournamentDetails";
+import TournamentSchedule from "./view/TournamentSchedule";
 
 const useStyles = makeStyles({
   screenContainer: {
@@ -102,6 +104,8 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/Tournament" element={<Tournament />} />
+          <Route path="/TournamentDetails" element={<TournamentDetails />} />
+        <Route path="/TournamentSchedule" element={<TournamentSchedule />}/>
           // Admin routes nested under /admin
           <Route path="/admin/*" element={<AdminRoutes />} />
           <Route path="/member/*" element={<MemberRoute />} />

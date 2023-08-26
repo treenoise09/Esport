@@ -73,7 +73,7 @@ const CreateTeam = () => {
           <Grid item xs={12} key={index}>
             <TextField
               fullWidth
-              label={`Member ${index + 1}`}
+              label={`Member ${index + 1} Username`}
               variant="outlined"
               name={`member${index}`}
               value={member}

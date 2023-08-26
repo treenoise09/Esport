@@ -62,7 +62,7 @@ router.post('/',[
 
         await conn.commit();
 
-        res.status(201).send({message:'Team and members created successfully', teamId: teamId});
+        res.status(201).send({message:'Team and members created successfully'});
     } catch (error) {
         await conn.rollback();
         console.error(error);

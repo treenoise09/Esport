@@ -91,8 +91,15 @@ router.post("/", registerValidation, async (req, res) => {
  */
 router.get("/", async (req, res) => {
   const conn = await pool.getConnection();
+  const {tour_id} = req.query
   try {
-    const registrations = await conn.query("SELECT * FROM Register");
+    let registrations;
+    if(tour_id){
+      registrations = await conn.query("SELECT * FROM Register WHERE tour_id = ?",[tour_id]);
+    }else{
+      registrations = await conn.query("SELECT * FROM Register");
+
+    }
     res.json({ data: registrations });
   } catch (error) {
     console.error(error);
@@ -227,6 +234,68 @@ router.put("/:id", registerValidation, async (req, res) => {
     if (conn) conn.release(); // Ensure connection is released
   }
 });
+
+/**
+ * @swagger
+ * /register/bulk:
+ *   put:
+ *     tags:
+ *       - Register
+ *     description: Bulk update registrations
+ *     parameters:
+ *       - name: registrations
+ *         description: Array of registration objects to update
+ *         in: body
+ *         required: true
+ *         schema:
+ *           type: array
+ *           items:
+ *             $ref: '#/definitions/Register'
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Successfully updated
+ *         content:
+ *            application/json:
+ *                 schema:
+ *                     $ref: '#/definitions/ResponseError'
+ *       500:
+ *         description: Server error
+ *         content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/definitions/ResponseError'
+ */
+router.put("/bulk", async (req, res) => {
+  const conn = await pool.getConnection();
+  try {
+    const registrations = req.body;
+
+    // Start a transaction
+    await conn.beginTransaction();
+
+    for (const registration of registrations) {
+      await conn.query(
+        "UPDATE Register SET status = ? WHERE register_id = ?",
+        [registration.status, registration.register_id]
+      );
+    }
+
+    // Commit the transaction
+    await conn.commit();
+
+    res.status(200).send({ message: "Bulk update successful!" });
+  } catch (error) {
+    // Rollback the transaction in case of an error
+    await conn.rollback();
+    console.error(error);
+    res.status(500).send({ message: "Server error" });
+  } finally {
+    if (conn) conn.release(); // Ensure connection is released
+  }
+});
+
 
 /**
  * @swagger

@@ -53,7 +53,7 @@ const CreateTeam = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} style={{padding:'10px'}}>
       <Typography variant="h4" gutterBottom>
         Create Team
       </Typography>

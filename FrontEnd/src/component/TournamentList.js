@@ -1,9 +1,12 @@
 import React from "react";
-import { Table, TableBody, TableCell, TableHead, TableRow, IconButton, TableContainer, Paper } from "@mui/material";
+import { Table, TableBody, TableCell, TableHead, TableRow, IconButton, TableContainer, Paper, Icon } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import { useNavigate } from "react-router-dom";
 
 function TournamentList({ tournaments, onEdit, onDelete }) {
+  const navigate = useNavigate()
   return (
     <TableContainer component={Paper}>
     <Table>
@@ -21,6 +24,7 @@ function TournamentList({ tournaments, onEdit, onDelete }) {
           <TableCell>Game Name</TableCell>
           <TableCell> Status </TableCell>
           <TableCell>Actions</TableCell>
+          <TableCell>Registrations</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -43,6 +47,11 @@ function TournamentList({ tournaments, onEdit, onDelete }) {
               </IconButton>
               <IconButton onClick={() => onDelete(tournament.tour_id)}>
                 <DeleteIcon />
+              </IconButton>
+            </TableCell>
+            <TableCell>
+              <IconButton onClick={() => navigate(`/admin/Tournament/${tournament.tour_id}`)}>
+                <EmojiEventsIcon/>
               </IconButton>
             </TableCell>
           </TableRow>

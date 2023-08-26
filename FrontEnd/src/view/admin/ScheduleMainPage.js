@@ -39,7 +39,7 @@ function ScheduleMainPage() {
     };
 
     return (
-        <div>
+        <div style={{padding:'10px'}}>
             <h1>Schedule</h1>
             <ScheduleForm onSubmit={handleFormSubmit} initialData={selectedSchedule} />
             <TableContainer component={Paper}>

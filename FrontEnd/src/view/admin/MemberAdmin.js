@@ -46,7 +46,7 @@ function MemberAdmin() {
   };
 
   return (
-    <Container>
+    <Container sx={{padding:'10px'}}>
       <h1>Member Admin</h1>
       <MemberForm key={selectedMember ? selectedMember.member_id : 'create'} onSubmit={handleFormSubmit} initialData={selectedMember} isAdmin={true} />
       <MemberList

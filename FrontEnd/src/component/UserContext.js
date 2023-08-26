@@ -8,7 +8,7 @@ export const useUser = () => {
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true);
   // This useEffect will only run once when the component is mounted,
   // it will check if there is user information in localStorage and set it to state
   useEffect(() => {
@@ -16,6 +16,7 @@ export const UserProvider = ({ children }) => {
     if (localUser) {
       setUser(JSON.parse(localUser));
     }
+    setIsLoading(false);
   }, []);
 
   // This useEffect will run every time the user state changes,
@@ -32,7 +33,7 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem('user');
   };
   return (
-    <UserContext.Provider value={{ user, setUser,signOut  }}>
+    <UserContext.Provider value={{ user, setUser,signOut,isLoading   }}>
       {children}
     </UserContext.Provider>
   );

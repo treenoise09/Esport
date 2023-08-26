@@ -15,6 +15,15 @@ export const createRegistration = async (teamId, tourId) => {
   }
 };
 
+export const getAllRegistrationsByTournamentId = async (id) => {
+  try {
+    const response = await axios.get(`${API_URL}/register?tour_id=${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching all registrations:', error);
+    throw error;
+  }
+};
 export const getAllRegistrations = async () => {
   try {
     const response = await axios.get(`${API_URL}/register`);
@@ -24,6 +33,7 @@ export const getAllRegistrations = async () => {
     throw error;
   }
 };
+
 
 export const getRegistrationById = async (id) => {
   try {
@@ -35,15 +45,22 @@ export const getRegistrationById = async (id) => {
   }
 };
 
-export const updateRegistration = async (id, teamId, tourId) => {
+export const updateRegistration = async (id, register) => {
   try {
-    const response = await axios.put(`${API_URL}/register/${id}`, {
-      team_id: teamId,
-      tour_id: tourId,
-    });
+    const response = await axios.put(`${API_URL}/register/${id}`, register);
     return response.data;
   } catch (error) {
     console.error(`Error updating registration ${id}:`, error);
+    throw error;
+  }
+};
+
+export const bulkUpdateRegistrations = async (register) => {
+  try {
+    const response = await axios.put(`${API_URL}/register/bulk`, register);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating registration:`, error);
     throw error;
   }
 };

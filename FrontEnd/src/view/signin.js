@@ -15,6 +15,7 @@ import signin from "../photo/signin.jpg";
 
 import Breadcrumbs from "../component/CustomBreadcrumbs";
 import Footer from "../component/Footer";
+import Appbar from "../component/Appbar";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -45,14 +46,7 @@ export default function SignIn() {
       <div
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
-        <Breadcrumbs
-          pages={[
-            { title: "Home", path: "/" },
-            { title: "Tournament", path: "/Tournament" },
-            { title: "TournamentSchedule", path: "/TournamentSchedule" },
-          ]}
-        />
-
+        <Appbar/>
         <Container component="main" maxWidth="xl" style={{ flex: 1 }}>
           <CssBaseline />
 

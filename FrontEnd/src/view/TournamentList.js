@@ -12,15 +12,6 @@ const theme = createTheme();
 export default function Home() {
   return (
     <ThemeProvider theme={theme}>
-      <Breadcrumbs
-        pages={[
-          { title: "Home", path: "/" },
-          { title: "Sign in", path: "/signin" },
-          { title: "Sign up", path: "/signup" },
-          { title: "Tournament", path: "/Tournament" },
-          { title: "TournamentList", path: "/TournamentList" },
-        ]}
-      />
 
       <main>
         {/* Hero unit */}

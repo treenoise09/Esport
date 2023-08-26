@@ -40,12 +40,7 @@ export default function Home() {
   };
   return (
     <ThemeProvider theme={theme}>
-      <Breadcrumbs
-        pages={[
-          { title: "Home", path: "/" },
-          { title: "Tournament", path: "/Tournament" },
-        ]}
-      />
+
      <main style={{padding:'10%'}}>
         <Container fixed>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', maxWidth: 1600 }}>

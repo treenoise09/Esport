@@ -69,8 +69,7 @@ function Match() {
   };
 
   return (
-    <div className={classes.screenContainer}>
-      <Container className={classes.formContainer}>
+      <div>
         <h1>Match CRUD</h1>
         <MatchForm key={selectedMatch ? selectedMatch.match_id : 'create'} onSubmit={handleFormSubmit} initialData={selectedMatch} />
         <MatchList
@@ -78,8 +77,7 @@ function Match() {
           onDelete={handleDelete}
           onEdit={setSelectedMatch}
         />
-      </Container>
-    </div>
+      </div>
   );
 }
 

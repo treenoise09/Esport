@@ -16,6 +16,7 @@ import signup from "../photo/signup.jpg";
 
 import Breadcrumbs from "../component/CustomBreadcrumbs";
 import Footer from "../component/Footer";
+import Appbar from "../component/Appbar";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -46,13 +47,7 @@ export default function SignUp() {
       <div
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
-        <Breadcrumbs
-          pages={[
-            { title: "Home", path: "/" },
-            { title: "Tournament", path: "/Tournament" },
-          ]}
-        />
-
+        <Appbar />
         <Container component="main" maxWidth="xl" style={{ flex: 1 }}>
           <CssBaseline />
 

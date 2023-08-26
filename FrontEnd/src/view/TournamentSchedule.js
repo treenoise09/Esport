@@ -24,13 +24,6 @@ function TournamentSchedule() {
     return (
         <ThemeProvider theme={defaultTheme}>
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Breadcrumbs
-        pages={[
-          { title: "Home", path: "/" },
-          { title: "Tournament", path: "/Tournament" },
-          { title: "TournamentSchedule", path: "/TournamentSchedule" },
-        ]}
-      />
         <Container component="main" maxWidth="xxl">
             <CssBaseline />
             <h1 style={{color:'white'}}>Tournament Schedule</h1>

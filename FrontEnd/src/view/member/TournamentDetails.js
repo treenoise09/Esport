@@ -53,12 +53,7 @@ export default function TournamentDetails() {
       <div
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
-        <Breadcrumbs
-          pages={[
-            { title: "Home", path: "/" },
-            { title: "Tournament", path: "/Tournament" },
-          ]}
-        />
+
 
         <Container component="main" maxWidth="xl" style={{ flex: 1 }}>
           <CssBaseline />

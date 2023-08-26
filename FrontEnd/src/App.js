@@ -1,5 +1,6 @@
 import "./App.css";
-import React from "react";
+import React, {useEffect} from "react";
+import { useNavigate } from 'react-router-dom';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 //view
@@ -16,22 +17,24 @@ import { makeStyles } from "@mui/styles";
 import { Container } from "@mui/system";
 import ScheduleMainPage from "./view/admin/ScheduleMainPage";
 import Footer from "./component/Footer";
-import { AppBar } from "@mui/material";
-import CustomBreadcrumbs from "./component/CustomBreadcrumbs";
+import { UserProvider,useUser } from "./component/UserContext";
 import TournamentDetails from "./view/member/TournamentDetails";
 import Profile from "./view/member/Profile";
+import AdminNavBar from "./component/AdminNavBar";
+import MemberNavBar from "./component/MemberNavBar";
 
 const useStyles = makeStyles({
   screenContainer: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "100vh",
     flexDirection: "column",
     color: "white",
+
   },
   formContainer: {
-    padding: "20px",
+    margin:"20px",
+    padding: "10px",
     borderRadius: "10px",
     backgroundImage: "linear-gradient(45deg, #4a1a1c, #0f1849)",
   },
@@ -75,6 +78,7 @@ function AdminRoutes() {
   const classes = useStyles();
   return (
     <div className={classes.screenContainer}>
+      <AdminNavBar/>
       <Container className={classes.formContainer}>
         <Routes>
           <Route path="Match" element={<Match />} />
@@ -91,6 +95,7 @@ function MemberRoute() {
   const classes = useStyles();
   return (
     <div className={classes.screenContainer}>
+      <MemberNavBar/>
     <Container className={classes.formContainer}>
     <Routes>
       <Route path="/Tournament" element={<Tournament />} />
@@ -101,8 +106,36 @@ function MemberRoute() {
     </div>
   );
 }
+const AdminGuard = ({ children }) => {
+  const navigate = useNavigate();
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (!user || user.role !== 'ADMIN') {
+      // Redirect to home or login page if the user is not an admin
+      navigate('/');
+    }
+  }, [user, navigate]);
+
+  return user && user.role === 'ADMIN' ? children : null;
+};
+const MemberGuard = ({ children }) => {
+  const navigate = useNavigate();
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (!user || user.role !== 'USER') {
+      // Redirect to home or login page if the user is not an admin
+      navigate('/');
+    }
+  }, [user, navigate]);
+
+  return user && user.role === 'USER' ? children : null;
+};
+
 function App() {
   return (
+    <UserProvider>
     <ThemeProvider theme={theme}>
       <div
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
@@ -115,14 +148,19 @@ function App() {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/Tournament" element={<Tournament />} />
             // Admin routes nested under /admin
-            <Route path="/admin/*" element={<AdminRoutes />} />
-            <Route path="/member/*" element={<MemberRoute />} />
+            <Route path="/admin/*" element={<AdminGuard>
+              <AdminRoutes/>
+            </AdminGuard>} />
+            <Route path="/member/*" element={<MemberGuard>
+              <MemberRoute />
+            </MemberGuard>} />
           </Routes>
         </BrowserRouter>
         <div style={{ flexGrow: 1 }}></div>
         <Footer />
       </div>
     </ThemeProvider>
+    </UserProvider>
   );
 }
 

@@ -7,6 +7,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
+import { useUser } from "./UserContext";
 
 function MemberForm({ onSubmit, initialData, isAdmin }) {
   const [formData, setFormData] = useState(
@@ -20,7 +21,8 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
       team_id: 0,
     }
   );
-
+  const user = useUser();
+  console.log(user);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -32,6 +34,7 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
   };
 
   return (
+    user.user ? (
     <form onSubmit={handleSubmit}>
       <TextField
         name="username"
@@ -41,9 +44,17 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
         onChange={handleChange}
         required
         fullWidth
+        InputProps={{
+    style: {
+      color: "white",
+    },
+  }}
+  InputLabelProps={{
+    style: { color: "white" },
+  }}
       />
       <TextField
-        label="Password"
+        label="password"
         name="password"
         type="password"
         margin="normal"
@@ -51,15 +62,31 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
         onChange={handleChange}
         required
         fullWidth
+        InputProps={{
+    style: {
+      color: "white",
+    },
+  }}
+  InputLabelProps={{
+    style: { color: "white" },
+  }}
       />
       <TextField
         name="name"
-        label="Name"
+        label="name"
         margin="normal"
         value={formData.name}
         onChange={handleChange}
         fullWidth
         required
+        InputProps={{
+    style: {
+      color: "white",
+    },
+  }}
+  InputLabelProps={{
+    style: { color: "white" },
+  }}
       />
       <TextField
         label="AKA"
@@ -69,6 +96,14 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
         onChange={handleChange}
         required
         fullWidth
+        InputProps={{
+    style: {
+      color: "white",
+    },
+  }}
+  InputLabelProps={{
+    style: { color: "white" },
+  }}
       />
       {isAdmin ? (
         <FormControl fullWidth variant="outlined" required margin="normal">
@@ -92,6 +127,7 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
           fullWidth
           value={formData.team_id}
           onChange={handleChange}
+          inputProps={{ style: { color: "white" } }}
           required
         />
       ) : null}
@@ -112,6 +148,9 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
         Submit
       </Button>
     </form>
+    ) : (
+      <div>Loading...</div>  // or any other placeholder or spinner
+    )
   );
 }
 

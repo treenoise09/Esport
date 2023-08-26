@@ -33,14 +33,15 @@ export default function Home() {
         data.regis_end = extractDateForInput(data.regis_end)
         data.end_date = extractDateForInput(data.end_date)
         return data
-      }));
+        
+      }
+      ));
     } catch (error) {
       console.error("Failed to fetch tournaments", error);
     }
   };
   return (
     <ThemeProvider theme={theme}>
-
      <main style={{padding:'10%'}}>
         <Container fixed>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', maxWidth: 1600 }}>

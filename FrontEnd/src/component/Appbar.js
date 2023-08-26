@@ -8,13 +8,15 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { Stack } from '@mui/material'
+import { useUser } from './UserContext';
 
 import photo from '../photo/tk1.png';
 
 
 
 export default function Appbar() {
-
+    const user = useUser();
+    console.log("User object:", user);
     return (
         <AppBar position="static"
             sx={{
@@ -83,38 +85,55 @@ export default function Appbar() {
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <Stack direction="row" spacing={1}>
-
-                                <Button color="inherit"
-                                    variant="outlined"
-                                    href="/signin"
-                                    sx={{
-                                        bgcolor: '#FF8C00',
-                                        color: '#000000',
-                                        '&:hover': {
-                                            bgcolor: '#B22222',
-                                        },
-                                    }}
-                                >
-                                    sign in
-                                </Button>
-
-                                <Button
-                                    color="inherit"
-                                    variant="outlined"
-                                    href="/signup"
-                                    sx={{
-                                        bgcolor: '#FF8C00',
-                                        color: '#000000',
-                                        '&:hover': {
-                                            bgcolor: '#B22222',
-                                        },
-                                    }}
-                                >
-                                    Sign Up
-                                </Button>
+                                {user.user != null ? (
+                                    <Button
+                                        color="inherit"
+                                        variant="outlined"
+                                        href={`/Profile/${user.user.memberId}`}  // Assuming the dashboard route for logged-in users
+                                        sx={{
+                                            bgcolor: '#FF8C00',
+                                            color: '#000000',
+                                            '&:hover': {
+                                                bgcolor: '#B22222',
+                                            },
+                                        }}
+                                    >
+                                        {user.user.memberName}
+                                    </Button>
+                                ) : (
+                                    <>
+                                        <Button
+                                            color="inherit"
+                                            variant="outlined"
+                                            href="/signin"
+                                            sx={{
+                                                bgcolor: '#FF8C00',
+                                                color: '#000000',
+                                                '&:hover': {
+                                                    bgcolor: '#B22222',
+                                                },
+                                            }}
+                                        >
+                                            Sign In
+                                        </Button>
+                                        <Button
+                                            color="inherit"
+                                            variant="outlined"
+                                            href="/signup"
+                                            sx={{
+                                                bgcolor: '#FF8C00',
+                                                color: '#000000',
+                                                '&:hover': {
+                                                    bgcolor: '#B22222',
+                                                },
+                                            }}
+                                        >
+                                            Sign Up
+                                        </Button>
+                                    </>
+                                )}
                             </Stack>
                         </Tooltip>
-
                     </Box>
                 </Toolbar>
             </Container>

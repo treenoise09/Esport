@@ -1,21 +1,34 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 
-const UserContext = createContext();
-
-export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-
-    return (
-        <UserContext.Provider value={{ user, setUser}}>
-            {children}
-        </UserContext.Provider>
-    );
-}
+export const UserContext = createContext();
 
 export const useUser = () => {
-    const context = useContext(UserContext);
-    if (!context) {
-        throw new Error("useUser must be used within a UserProvider");
+  return useContext(UserContext);
+};
+
+export const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+
+  // This useEffect will only run once when the component is mounted,
+  // it will check if there is user information in localStorage and set it to state
+  useEffect(() => {
+    const localUser = localStorage.getItem('user');
+    if (localUser) {
+      setUser(JSON.parse(localUser));
     }
-    return context;
-}
+  }, []);
+
+  // This useEffect will run every time the user state changes,
+  // it will update the localStorage with new user information
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    }
+  }, [user]);
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
+};

@@ -13,10 +13,11 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signup from "../photo/signup.jpg";
-
 import Breadcrumbs from "../component/CustomBreadcrumbs";
 import Footer from "../component/Footer";
 import Appbar from "../component/Appbar";
+import memberAPI from './../apis/memberAPI';
+import { Route } from "react-router-dom";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -32,15 +33,36 @@ const defaultTheme = createTheme({
   },
 });
 
+
+
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
+    const memberData = {
+      name: data.get("firstName"),
+      lastName: data.get("lastName"),
+      aka: data.get("aka"),
+      age: data.get("age"),
+      username: data.get("username"),
       password: data.get("password"),
-    });
+      role:("USER"),
+      team_id:(null)
+    };
+  
+    console.log("Member Data:", memberData);
+  
+    try {
+      const result = await memberAPI.registerMember(memberData);
+      console.log("Member registered successfully:", result);
+    
+      // Navigate to another page or show success message
+    } catch (error) {
+      console.error("Registration failed:", error);
+      // Show error message
+    }
   };
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>

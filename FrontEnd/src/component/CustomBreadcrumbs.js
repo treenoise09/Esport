@@ -4,10 +4,13 @@ import Link from "@mui/material/Link"
 import PropTypes from "prop-types"
 import { Link as RouterLink, useLocation } from "react-router-dom"
 import { Grid, Typography } from "@mui/material"
+import { useUser } from './UserContext'; // Change './UserContext' to the actual path where your UserContext is located
+
 
 
 // ...
 const CustomBreadcrumbs = ({ pages }) => {
+  const user = useUser();
   return (
     <Grid container spacing={0} py={0} px={0}>
       <Grid item md={12} xs={12}>
@@ -35,8 +38,7 @@ const CustomBreadcrumbs = ({ pages }) => {
                 {page.title}
               </Typography>
             )
-          )}
-
+          )} 
         </Breadcrumbs>
 
       </Grid>

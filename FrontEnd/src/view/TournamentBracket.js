@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { Grid, Paper, Typography, Box } from '@mui/material';
 const useStyles = makeStyles({
     teamItem: {
-        backgroundColor: '#f4f4f4',
+        backgroundColor: '#fff',
         padding: '.5rem',
         display: 'block',
         margin: '.5rem 10px',
@@ -17,7 +17,7 @@ horizontalBracket: {
     '&:before': {
         content: '""',
         position: 'absolute',
-        borderTop: '2px solid #4f7a38',
+        borderTop: '2px solid #fff',
         width: '40px',  // Adjust based on the desired width of the horizontal line
         right: '-40px',
         top: '50%',
@@ -28,7 +28,7 @@ matchConnectLine: {
     '&:after': {
         content: '""',
         position: 'absolute',
-        borderRight: '2px solid #4f7a38',
+        borderRight: '2px solid #fff',
         height: 'calc(100% + 17px)', // Adjust the height to span between matches.
         right: '-40px', 
         zIndex: '-1',
@@ -37,7 +37,7 @@ matchConnectLine: {
     '&:before': {
       content: '""',
       position: 'absolute',
-      borderTop: '2px solid #4f7a38',
+      borderTop: '2px solid #fff',
       width: '40px', // Adjust based on the desired width of the horizontal line
       right: '-40px', // Move 40px to the left of the existing line, making the total 80px to the right
       top: '50%',
@@ -48,7 +48,7 @@ QuaterLine: {
     '&:after': {
         content: '""',
         position: 'absolute',
-        borderRight: '2px solid #4f7a38',
+        borderRight: '2px solid #fff',
         
         right: '-40px', 
         zIndex: '-1',
@@ -59,7 +59,7 @@ SemiLine: {
     '&:after': {
         content: '""',
         position: 'absolute',
-        borderRight: '2px solid #4f7a38',
+        borderRight: '2px solid #fff',
         height: 'calc(100% + 335px)', // Adjust the height to span between matches.
         right: '-40px', 
         zIndex: '-1',
@@ -71,7 +71,7 @@ finalHorizontalBracket: {
     '&:before': {
         content: '""',
         position: 'absolute',
-        borderTop: '2px solid #4f7a38',
+        borderTop: '2px solid #fff',
         width: '30px',  // Adjust based on the desired width of the horizontal line
         left: '-20px',  // Place the line to the left of the element to make it at the start
         top: '50%',
@@ -83,7 +83,7 @@ startHorizontalBracket: {
     '&:after': {
         content: '""',
         position: 'absolute',
-        borderTop: '2px solid #4f7a38',
+        borderTop: '2px solid #fff',
         width: '30px',  // Adjust based on the desired width of the horizontal line
         left: '-20px',  // Place the line to the left of the element to make it at the start
         top: '50%',
@@ -112,7 +112,7 @@ function Match({
         {showQuaterLine && (
           <Box position="absolute" style={{content: '""',
           position: 'absolute',
-          borderRight: '2px solid #4f7a38',
+          borderRight: '2px solid #fff',
           height: 'calc(100% + 108px)', // Adjust the height to span between matches.
           right: '-40px', 
           zIndex: '-1',
@@ -124,7 +124,7 @@ function Match({
         )}
         {finalHorizontalBracket && (
           <Box position="absolute" style ={{height: '442px',
-          borderLeft: '2px solid rgb(79, 122, 56)',
+          borderLeft: '2px solid #fff',
           top: '-169px',
           left: '-20px'}} />
         )}
@@ -138,10 +138,10 @@ function Match({
             ${startHorizontalBracket ? classes.startHorizontalBracket : ''}  
           `}
         >
-          <Paper elevation={3} className={classes.teamItem}>
+          <Paper elevation={3} className={classes.teamItem} style={{backgroundColor:'#515257',color:'#fff'}}>
               <Typography>{team1}</Typography>
           </Paper>
-          <Paper elevation={3} className={classes.teamItem}>
+          <Paper elevation={3} className={classes.teamItem} style={{backgroundColor:'#515257',color:'#fff'}}>
               <Typography>{team2}</Typography>
           </Paper>
         </Box>

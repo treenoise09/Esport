@@ -9,12 +9,12 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signup from "../../photo/signup.jpg";
 import Breadcrumbs from "../../component/CustomBreadcrumbs";
-import Footer from "../../component/Footer";
 import memberAPI from "../../apis/memberAPI";
 import { useParams } from "react-router-dom";
 import { createRegistration } from "../../apis/registerAPI";
 import TournamentDetail from "../../component/TournamentDetail";
-
+import tournamentAPI from "../../apis/tournamentAPI";
+import { useUser } from '../../component/UserContext';
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme({
@@ -30,39 +30,54 @@ const defaultTheme = createTheme({
 });
 
 export default function TournamentDetails() {
+  const [tournamentData, setTournamentData] = React.useState({
+    data: {
+      tour_name: '',
+    }
+  }
+  );
+  
   const [hasTeam, setHasTeam] = React.useState(0); // Set to true if the user has a team
   const { id } = useParams();
   const isUserRegistered = true;
+  const { user } = useUser();
   const handleSubmit = (event) => {
     event.preventDefault();
     createRegistration(hasTeam, id);
   };
   const fecthHasTeam = async () => {
-    const res = await memberAPI.getMemberById(1);
+    const res = await memberAPI.getMemberById(user.memberId);
     setHasTeam(res.team_id);
     console.log(hasTeam);
   };
+  
   const fetchRegister = async () => {};
 
   React.useEffect(() => {
     fecthHasTeam();
+    fetchTournamentById(id); // Function that updates tournamentData
   }, []);
-
+  
+  const fetchTournamentById = async (id) => {
+    const data = await tournamentAPI.getTournamentById(id);
+    setTournamentData(data);
+    console.log("Received Data:", data);
+  };
+  
   return (
     <ThemeProvider theme={defaultTheme}>
       <div
-        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+        style={{ display: "flex", flexDirection: "column"}}
       >
-
 
         <Container component="main" maxWidth="xl" style={{ flex: 1 }}>
           <CssBaseline />
-
+<div><h1 style={{color:'white'}}>{tournamentData.data.tour_name}</h1></div>
           <Box
             sx={{
               display: "flex",
               marginTop: 8,
-              backgroundImage: "linear-gradient(45deg, #4a1a1c,#0f1849)",
+              backgroundImage: 'linear-gradient(to right, #2f3137, #373d58)',
               borderRadius: "10px",
             }}
           >
@@ -94,21 +109,8 @@ export default function TournamentDetails() {
                 padding: "20px",
               }}
             >
-              <div style={{ width: "100%" }}>
-                <Typography
-                  component="h1"
-                  variant="h4"
-                  align="left"
-                  paddingLeft="15%"
-                  sx={{
-                    color: "#ffffff",
-                  }}
-                >
-                  Tournament Details
-                </Typography>
-              </div>
               <Box>
-              <TournamentDetail />
+              <TournamentDetail setTournamentData={setTournamentData} />
               </Box>
               <Box
                 component="form"
@@ -166,7 +168,6 @@ export default function TournamentDetails() {
             </div>
           </Box>
         </Container>
-        <Footer />
       </div>
     </ThemeProvider>
   );

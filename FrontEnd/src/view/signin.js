@@ -12,11 +12,13 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signin from "../photo/signin.jpg";
-
+import memberAPI from './../apis/memberAPI';
 import Breadcrumbs from "../component/CustomBreadcrumbs";
 import Footer from "../component/Footer";
 import Appbar from "../component/Appbar";
 
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../component/UserContext';
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme({
@@ -31,14 +33,46 @@ const defaultTheme = createTheme({
   },
 });
 
+
+
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+  const { setUser } = useUser();
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
+    const memberData = {
+      username: data.get("username"),
       password: data.get("password"),
-    });
+    };
+    try {
+      const result = await memberAPI.loginMember(memberData);
+      setUser({
+        memberId: result.data.member_id,
+        memberName: result.data.name,
+        member: result.data.aka,
+        memberCreated_at: result.data.created_at,
+
+        memberEmail: result.data.email,
+
+        memberPassword: result.data.password,
+
+        memberRole: result.data.role,
+
+        memberTeam_id: result.data.team_id,
+
+        memberUpdated_at: result.data.updated_at,
+
+        memberUsername: result.data.username
+      });
+      console.log("Login successful:", result);
+      navigate('/tournament');
+      // Navigate to another page or show success message
+    } catch (error) {
+      console.error("Login failed:", error);
+      // Show error message
+    }
   };
 
   return (

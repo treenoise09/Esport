@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 import { createRegistration } from "../../apis/registerAPI";
 import TournamentDetail from "../../component/TournamentDetail";
 import tournamentAPI from "../../apis/tournamentAPI";
-import { useUser } from '../../component/UserContext';
+import { useUser } from "../../component/UserContext";
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme({
@@ -32,11 +32,10 @@ const defaultTheme = createTheme({
 export default function TournamentDetails() {
   const [tournamentData, setTournamentData] = React.useState({
     data: {
-      tour_name: '',
-    }
-  }
-  );
-  
+      tour_name: "",
+    },
+  });
+
   const [hasTeam, setHasTeam] = React.useState(0); // Set to true if the user has a team
   const { id } = useParams();
   const isUserRegistered = true;
@@ -50,34 +49,31 @@ export default function TournamentDetails() {
     setHasTeam(res.team_id);
     console.log(hasTeam);
   };
-  
-  const fetchRegister = async () => {};
 
   React.useEffect(() => {
     fecthHasTeam();
     fetchTournamentById(id); // Function that updates tournamentData
   }, []);
-  
+
   const fetchTournamentById = async (id) => {
     const data = await tournamentAPI.getTournamentById(id);
     setTournamentData(data);
     console.log("Received Data:", data);
   };
-  
+
   return (
     <ThemeProvider theme={defaultTheme}>
-      <div
-        style={{ display: "flex", flexDirection: "column"}}
-      >
-
+      <div style={{ display: "flex", flexDirection: "column" }}>
         <Container component="main" maxWidth="xl" style={{ flex: 1 }}>
           <CssBaseline />
-<div><h1 style={{color:'white'}}>{tournamentData.data.tour_name}</h1></div>
+          <div>
+            <h1 style={{ color: "white" }}>{tournamentData.data.tour_name}</h1>
+          </div>
           <Box
             sx={{
               display: "flex",
               marginTop: 8,
-              backgroundImage: 'linear-gradient(to right, #2f3137, #373d58)',
+              backgroundImage: "linear-gradient(to right, #2f3137, #373d58)",
               borderRadius: "10px",
             }}
           >
@@ -110,7 +106,7 @@ export default function TournamentDetails() {
               }}
             >
               <Box>
-              <TournamentDetail setTournamentData={setTournamentData} />
+                <TournamentDetail setTournamentData={setTournamentData} />
               </Box>
               <Box
                 component="form"

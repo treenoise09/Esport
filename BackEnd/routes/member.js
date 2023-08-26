@@ -112,7 +112,6 @@ router.post('/register', [
 router.post('/login', async (req, res) => {
     const conn = await pool.getConnection();
     try {
-
         const result = await conn.query("SELECT * FROM Member WHERE username = ?", [req.body.username]);
         if (result.length > 0) {
             const user = result[0];

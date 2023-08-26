@@ -25,9 +25,14 @@ export const UserProvider = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(user));
     }
   }, [user]);
-
+  const signOut = () => {
+    // Clear user from state
+    setUser(null);
+    // Remove user from localStorage
+    localStorage.removeItem('user');
+  };
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser,signOut  }}>
       {children}
     </UserContext.Provider>
   );

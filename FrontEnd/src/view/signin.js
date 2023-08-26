@@ -12,13 +12,13 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signin from "../photo/signin.jpg";
-import memberAPI from './../apis/memberAPI';
+import memberAPI from "./../apis/memberAPI";
 import Breadcrumbs from "../component/CustomBreadcrumbs";
 import Footer from "../component/Footer";
 import Appbar from "../component/Appbar";
 
-import { useNavigate } from 'react-router-dom';
-import { useUser } from '../component/UserContext';
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../component/UserContext";
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme({
@@ -32,8 +32,6 @@ const defaultTheme = createTheme({
     },
   },
 });
-
-
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -64,10 +62,14 @@ export default function SignIn() {
 
         memberUpdated_at: result.data.updated_at,
 
-        memberUsername: result.data.username
+        memberUsername: result.data.username,
       });
       console.log("Login successful:", result);
-      navigate('/tournament');
+      if (result.data.role === "ADMIN") {
+        navigate("/admin/Tournament");
+      } else {
+        navigate("/member/Tournament");
+      }
       // Navigate to another page or show success message
     } catch (error) {
       console.error("Login failed:", error);
@@ -80,7 +82,7 @@ export default function SignIn() {
       <div
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
-        <Appbar/>
+        <Appbar />
         <Container component="main" maxWidth="xl" style={{ flex: 1 }}>
           <CssBaseline />
 
@@ -164,23 +166,6 @@ export default function SignIn() {
                   label="Password"
                   type="password"
                   id="password"
-                  autoComplete="current-password"
-                  sx={{
-                    backgroundColor: "#636574",
-                    borderRadius: "10px",
-                  }}
-                  InputLabelProps={{
-                    style: { color: "#999aa3" },
-                  }}
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="confirmpassword"
-                  label="Confirm Password"
-                  type="confirmpassword"
-                  id="confirmpassword"
                   autoComplete="current-password"
                   sx={{
                     backgroundColor: "#636574",

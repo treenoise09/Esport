@@ -18,10 +18,6 @@ const MatchForm = ({ initialData, onSubmit }) => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Typography component="h1" variant="h5">
-        Match Form
-      </Typography>
       <form onSubmit={handleSubmit}>
         <Select
           labelId="result-label"
@@ -111,7 +107,6 @@ const MatchForm = ({ initialData, onSubmit }) => {
           Submit
         </Button>
       </form>
-    </Container>
   );
 };
 

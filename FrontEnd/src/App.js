@@ -34,7 +34,6 @@ const useStyles = makeStyles({
   },
   formContainer: {
     margin:"20px",
-    padding: "10px",
     borderRadius: "10px",
     backgroundImage: "linear-gradient(45deg, #4a1a1c, #0f1849)",
   },
@@ -111,26 +110,27 @@ const AdminGuard = ({ children }) => {
   const { user } = useUser();
 
   useEffect(() => {
-    if (!user || user.role !== 'ADMIN') {
+    if (!user || user.memberRole !== 'ADMIN') {
       // Redirect to home or login page if the user is not an admin
       navigate('/');
     }
   }, [user, navigate]);
 
-  return user && user.role === 'ADMIN' ? children : null;
+  return user && user.memberRole === 'ADMIN' ? children : null;
 };
 const MemberGuard = ({ children }) => {
   const navigate = useNavigate();
   const { user } = useUser();
 
   useEffect(() => {
-    if (!user || user.role !== 'USER') {
-      // Redirect to home or login page if the user is not an admin
+
+    if (!user) {
       navigate('/');
     }
+    console.log(user)
   }, [user, navigate]);
 
-  return user && user.role === 'USER' ? children : null;
+  return user && user.memberRole === 'USER' ? children : null;
 };
 
 function App() {
@@ -146,7 +146,6 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/Tournament" element={<Tournament />} />
             // Admin routes nested under /admin
             <Route path="/admin/*" element={<AdminGuard>
               <AdminRoutes/>

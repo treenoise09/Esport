@@ -40,6 +40,7 @@ function ScheduleMainPage() {
 
     return (
         <div>
+            <h1>Schedule</h1>
             <ScheduleForm onSubmit={handleFormSubmit} initialData={selectedSchedule} />
             <TableContainer component={Paper}>
             <Table>

@@ -5,6 +5,7 @@ import MemberForm from "../../component/MemberForm";
 import MemberAPI from "../../apis/memberAPI";
 import { useParams } from "react-router-dom";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import uploadImage from "../../apis/commonAPI";
 
 export default function Profile() {
   const [members, setMembers] = useState([]);
@@ -15,9 +16,6 @@ export default function Profile() {
   useEffect(() => {
     fetchMember();
   }, []);
-  function extractDateForInput(dateString) {
-    return dateString.split("T")[0]; // This will give you the YYYY-MM-DD format
-  }
   const fetchMember = async () => {
     try {
       const response = await MemberAPI.getMemberById(id);
@@ -48,16 +46,10 @@ export default function Profile() {
   };
 
   const handleUpload = async () => {
-    // Call your API to upload the blob here
-    // Convert the file to blob and send it
-    const formData = new FormData();
-    formData.append('profilePicture', file);
-
-    // Assuming uploadProfilePic is a method in your API to handle file upload
-    // await MemberAPI.uploadProfilePic(formData);
-    
+    await uploadImage(id, file);
     handleClose(); // Close modal
   };
+  
   return (
     <Container component="main" maxWidth="sm" style={{ flex: 1 }}>
 

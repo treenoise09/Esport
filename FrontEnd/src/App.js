@@ -24,6 +24,7 @@ import AdminNavBar from "./component/AdminNavBar";
 import MemberNavBar from "./component/MemberNavBar";
 import RegistrationPage from "./view/admin/RegistrationPage";
 import TournamentSchedule from "./view/TournamentSchedule";
+import Team from "./view/member/CreateTeam";
 
 const useStyles = makeStyles({
   screenContainer: {
@@ -98,14 +99,13 @@ function MemberRoute() {
   return (
     <div className={classes.screenContainer}>
       <MemberNavBar />
-      <Container className={classes.formContainer}>
         <Routes>
           <Route path="/Tournament" element={<Tournament />} />
           <Route path="/Tournament/:id" element={<TournamentDetails />} />
           <Route path="/Profile/:id" element={<Profile />} />
           <Route path="/Schedule/:id" element={ <TournamentSchedule/>}/>
+          <Route path="/create-team" element={<Team />}/>
         </Routes>
-      </Container>
     </div>
   );
 }
@@ -124,6 +124,7 @@ const AdminGuard = ({ children }) => {
 
   return user && user.memberRole === "ADMIN" ? children : null;
 };
+
 const MemberGuard = ({ children }) => {
   const navigate = useNavigate();
   const { user, isLoading } = useUser();
@@ -140,6 +141,7 @@ const MemberGuard = ({ children }) => {
 
   return user && user.memberRole === "USER" ? children : null;
 };
+
 
 function App() {
   return (

@@ -47,7 +47,16 @@ export default function TournamentDetail({ setTournamentData }) {
       end_date: "",
     },
   });
-
+  function extractDateForInput(dateString) {
+    const date = new Date(dateString.split('T')[0])
+    const result = date.toLocaleDateString('th-TH',{
+      year:'2-digit',
+      month:"short",
+      day:'2-digit'
+    })
+    return result;
+  }
+  
   const handleSubmit = (event) => {
     event.preventDefault();
   };
@@ -76,75 +85,53 @@ export default function TournamentDetail({ setTournamentData }) {
         <Container component="main" maxWidth="xl" style={{ flex: 1 }}>
           <CssBaseline />
 
-          <div
-            style={{
-              flex: "1",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              padding: "20px",
-              borderRadius: "10px",
-            }}
-          >
-            <div style={{ width: "100%" }}>
-              <Typography
-                component="h1"
-                variant="h4"
-                align="left"
-                sx={{
-                  color: "#ffffff",
-                }}
-              >
-                Details
-              </Typography>
-            </div>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 3 }}
-            >
-              <div
-                style={{
-                  backgroundColor: "#000",
-                  borderRadius: "20px",
-                  height: "100%",
-                  width: "100%",
-                }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs={2}>
-                    <GroupsIcon
-                      fontSize="inherit"
-                      style={{ color: "#fff", fontSize: "24px" }}
-                    />
-                  </Grid>
-                  <Grid item xs={10}>
-                    {/* Details for GroupsIcon */}
-                    <div style={{ color: "#FF8C00" }}>
-                      - รับสมัครจำนวน 16 ทีม
-                    </div>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <svg
-                      width="24px"
-                      height="24px"
-                      version="1.0"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 512.000000 512.000000"
-                      preserveAspectRatio="xMidYMid meet"
-                    >
-                      <metadata>
-                        Created by potrace 1.16, written by Peter Selinger
-                        2001-2019
-                      </metadata>
-                      <g
-                        transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                        fill="#fff"
-                        stroke="none"
+          
+            <div style={{ 
+              flex: '1', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            padding: '20px' ,
+            borderRadius: '10px'
+            }}>
+
+              <div style={{ width: '100%' }}>
+                <Typography
+                  component="h1"
+                  variant="h4"
+                  align="left"
+                  sx={{
+                    color: '#ffffff'
+                  }}>
+                  Details
+                </Typography>
+              </div>
+              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                <div style={{ backgroundColor: '#000', borderRadius: '20px', height: '100%', width: '100%', padding:'5px'}}>
+                  <Grid container spacing={2}>
+
+                    <Grid item xs={2}>
+                      <GroupsIcon fontSize="inherit" style={{ color: '#fff', fontSize: '24px' }} />
+                    </Grid>
+                    <Grid item xs={10}>
+                      {/* Details for GroupsIcon */}
+                      <div style={{ color: '#FF8C00' }}>- รับสมัครจำนวน {tournamentDetails.data.team_number} ทีม</div>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <svg
+                        width="24px"
+                        height="24px"
+                        version="1.0"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512.000000 512.000000"
+                        preserveAspectRatio="xMidYMid meet"
                       >
-                        <path
-                          d="M29 5091 l-29 -29 0 -389 0 -388 862 -862 863 -863 -250 -250 -250
+                        <metadata>
+                          Created by potrace 1.16, written by Peter Selinger 2001-2019
+                        </metadata>
+                        <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+                          fill="#fff" stroke="none">
+                          <path d="M29 5091 l-29 -29 0 -389 0 -388 862 -862 863 -863 -250 -250 -250
 -250 -195 195 -196 195 -54 0 -55 0 -252 -253 -253 -252 0 -46 c0 -63 16 -82
 279 -344 l221 -220 -360 -360 -360 -361 0 -54 0 -55 253 -252 252 -253 55 0
 54 0 361 360 360 360 220 -221 c262 -263 281 -279 344 -279 l46 0 252 253 253
@@ -205,43 +192,19 @@ c80 80 147 145 150 145 3 0 320 -315 705 -700z m3005 555 l145 -145 -703 -703
                     </div>
                   </Grid>
 
-                  <Grid item xs={2}>
-                    <CalendarMonthIcon
-                      fontSize="inherit"
-                      style={{ color: "#fff", fontSize: "24px" }}
-                    />
+                    <Grid item xs={2}>
+                      <CalendarMonthIcon fontSize="inherit" style={{ color: '#fff', fontSize: '24px' }} />
+                    </Grid>
+                    <Grid item xs={10}>
+                      {/* Details for CalendarMonthIcon */}
+                      <div style={{ color: '#FF8C00' }}>- เริ่มทำการแข่งขัน : {extractDateForInput(tournamentDetails.data.end_date)}</div>
+                    </Grid>
+
                   </Grid>
-                  <Grid item xs={10}>
-                    {/* Details for CalendarMonthIcon */}
-                    <div style={{ color: "#FF8C00" }}>
-                      - เริ่มทำการแข่งขัน {tournamentDetails.data.end_date}
-                    </div>
-                  </Grid>
-                </Grid>
-              </div>
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    mt: 3,
-                    mb: 2,
-                    fontWeight: 600,
-                    backgroundImage:
-                      "linear-gradient(to right, #224db0, #3f3732)",
-                    "&:hover": {
-                      // Adjust the hover gradient or other styles if needed
-                      backgroundImage:
-                        "linear-gradient(to right, #1e439a, #332d29)",
-                    },
-                  }}
-                  href={"/member/Schedule/"+id+"?name="+tournamentDetails.data.tour_name}
-                >
-                  Schedule
-                </Button>
-              </div>
-            </Box>
-          </div>
+                </div>
+              </Box>
+            </div>
+
         </Container>
       </div>
     </ThemeProvider>

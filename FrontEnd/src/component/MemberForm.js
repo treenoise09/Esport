@@ -8,6 +8,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import { useUser } from "./UserContext";
+import { useNavigate } from "react-router-dom";
 
 function MemberForm({ onSubmit, initialData, isAdmin }) {
   const [formData, setFormData] = useState(
@@ -22,6 +23,7 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
     }
   );
   const user = useUser();
+  const navigate = useNavigate();
   console.log(user);
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,6 +33,7 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
+    navigate("/");
   };
 
   return (
@@ -41,24 +44,6 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
         label="Username"
         margin="normal"
         value={formData.username}
-        onChange={handleChange}
-        required
-        fullWidth
-        InputProps={{
-    style: {
-      color: "white",
-    },
-  }}
-  InputLabelProps={{
-    style: { color: "white" },
-  }}
-      />
-      <TextField
-        label="password"
-        name="password"
-        type="password"
-        margin="normal"
-        value={formData.password}
         onChange={handleChange}
         required
         fullWidth
@@ -131,6 +116,12 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
           required
         />
       ) : null}
+      <div style={{ 
+  padding: '25px', 
+  display: 'flex', 
+  flexDirection: 'column', 
+  alignItems: 'flex-end'  // Align items to the end (right)
+}}>
       <Button
         type="submit"
         variant="contained"
@@ -147,6 +138,7 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
       >
         Submit
       </Button>
+      </div>
     </form>
     ) : (
       <div>Loading...</div>  // or any other placeholder or spinner

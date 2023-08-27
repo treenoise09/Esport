@@ -126,7 +126,7 @@ export default function TournamentDetails() {
                         <Button
                           variant="contained"
                           color="secondary"
-                          href="/create-team"
+                          href="/member/create-team"
                           sx={{
                             mt: 1,
                             mb: 2,
@@ -143,23 +143,25 @@ export default function TournamentDetails() {
                     </Typography>
                   </>
                 )}
+                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   disabled={!hasTeam} // Disable the button if the user doesn't have a team
                   sx={{
-                    mt: 3,
-                    mb: 2,
+                    mt: 3, mb: 2,
                     fontWeight: 600,
-                    backgroundColor: "#FF8C00",
-                    "&:hover": {
-                      bgcolor: "#B22222",
+                    backgroundImage: 'linear-gradient(to right, #224db0, #3f3732)',
+                    '&:hover': {
+                      // Adjust the hover gradient or other styles if needed
+                      backgroundImage: 'linear-gradient(to right, #1e439a, #332d29)'
                     },
                   }}
                 >
                   Register
                 </Button>
+                </div>
               </Box>
             </div>
           </Box>

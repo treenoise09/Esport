@@ -23,6 +23,7 @@ import Profile from "./view/member/Profile";
 import AdminNavBar from "./component/AdminNavBar";
 import MemberNavBar from "./component/MemberNavBar";
 import RegistrationPage from "./view/admin/RegistrationPage";
+import TournamentSchedule from "./view/TournamentSchedule";
 
 const useStyles = makeStyles({
   screenContainer: {
@@ -36,6 +37,7 @@ const useStyles = makeStyles({
     margin: "20px",
     borderRadius: "10px",
     backgroundImage: "linear-gradient(45deg, #4a1a1c, #0f1849)",
+    zIndex:"-1"
   },
 });
 
@@ -101,6 +103,7 @@ function MemberRoute() {
           <Route path="/Tournament" element={<Tournament />} />
           <Route path="/Tournament/:id" element={<TournamentDetails />} />
           <Route path="/Profile/:id" element={<Profile />} />
+          <Route path="/Schedule/:id" element={ <TournamentSchedule/>}/>
         </Routes>
       </Container>
     </div>

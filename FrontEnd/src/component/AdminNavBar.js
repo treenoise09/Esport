@@ -10,7 +10,9 @@ import {
   IconButton,
 } from "@mui/material";
 import photo from "../photo/tk1.png";
+import { useUser } from "./UserContext";
 function AdminNavBar() {
+  const {signOut} = useUser()
   return (
     <AppBar
       position="static"
@@ -144,6 +146,24 @@ function AdminNavBar() {
               style={{ textDecoration: "none", color: "white" }}
             >
               Schedule
+            </Link>
+          </Button>
+          <Button
+            color="inherit"
+            variant="outlined"
+            sx={{
+              bgcolor: "#FF8C00",
+              color: "#000000",
+              "&:hover": {
+                bgcolor: "#B22222",
+              },
+            }}
+          >
+            <Link
+              onClick={signOut}
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              Sign Out
             </Link>
           </Button>
         </Toolbar>

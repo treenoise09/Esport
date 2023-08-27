@@ -136,7 +136,7 @@ router.get('/', async (req, res) => {
     const conn = await pool.getConnection();
     try {
 
-        const members = await conn.query("SELECT * FROM Member");
+        const members = await conn.query("SELECT Member.*,image_table.* FROM Member LEFT JOIN image_table ON Member.member_id = image_table.tableId ");
         res.json({data: members});
     } catch (error) {
         console.error(error);
@@ -150,7 +150,7 @@ router.get('/:id', async (req, res) => {
     const conn = await pool.getConnection();
     try {
 
-        const member = await conn.query("SELECT * FROM Member WHERE member_id = ?", [req.params.id]);
+        const member = await conn.query("SELECT Member.*,image_table.* FROM Member LEFT JOIN image_table ON Member.member_id = image_table.tableId WHERE Member.member_id = ? ", [req.params.id]);
         if (member.length > 0) {
             res.json(member[0]);
         } else {

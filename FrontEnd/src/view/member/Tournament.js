@@ -41,9 +41,9 @@ export default function Home() {
   };
   return (
     <ThemeProvider theme={theme}>
-     <main style={{padding:'10%'}}>
+     <main >
         <Container fixed>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', maxWidth: 1600 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', maxWidth: 1600 ,padding:'15px'}}>
             {tournaments?.map((tournament) => (
               <Card key={tournament.tour_id} sx={{ width: 300, position: 'relative' }}>
 

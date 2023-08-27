@@ -57,7 +57,7 @@ export const updateRegistration = async (id, register) => {
 
 export const bulkUpdateRegistrations = async (register) => {
   try {
-    const response = await axios.put(`${API_URL}/register/bulk`, register);
+    const response = await axios.put(`${API_URL}/register/bulk/update`, register);
     return response.data;
   } catch (error) {
     console.error(`Error updating registration:`, error);

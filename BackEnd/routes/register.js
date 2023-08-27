@@ -95,7 +95,12 @@ router.get("/", async (req, res) => {
   try {
     let registrations;
     if(tour_id){
-      registrations = await conn.query("SELECT * FROM Register WHERE tour_id = ?",[tour_id]);
+      registrations = await conn.query(`
+      SELECT Register.*, Team.team_name
+      FROM Register 
+      JOIN Team ON Register.team_id = Team.team_id 
+      WHERE Register.tour_id = ?
+    `, [tour_id]);
     }else{
       registrations = await conn.query("SELECT * FROM Register");
 
@@ -217,10 +222,11 @@ router.put("/:id", registerValidation, async (req, res) => {
     return res.status(400).json({ message: errors.array() });
   }
   const conn = await pool.getConnection();
+
   try {
     const result = await conn.query(
-      "UPDATE Register SET team_id = ?, tour_id = ? WHERE register_id = ?",
-      [req.body.team_id, req.body.tour_id, req.params.id]
+      "UPDATE Register SET team_id = ?, tour_id = ?,status = ?, round = ?  WHERE register_id = ?",
+      [req.body.team_id, req.body.tour_id,req.body.status,req.body.round, req.params.id]
     );
     if (result.affectedRows > 0) {
       res.send({ message: "Registration updated successfully!" });
@@ -267,7 +273,8 @@ router.put("/:id", registerValidation, async (req, res) => {
  *                  schema:
  *                      $ref: '#/definitions/ResponseError'
  */
-router.put("/bulk", async (req, res) => {
+router.put("/bulk/update", async (req, res) => {
+  console.log("Get in")
   const conn = await pool.getConnection();
   try {
     const registrations = req.body;
@@ -277,8 +284,8 @@ router.put("/bulk", async (req, res) => {
 
     for (const registration of registrations) {
       await conn.query(
-        "UPDATE Register SET status = ? WHERE register_id = ?",
-        [registration.status, registration.register_id]
+        "UPDATE Register SET status = ?, position = ? WHERE register_id = ?",
+        [registration.status,registration.position, registration.register_id]
       );
     }
 

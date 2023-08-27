@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, CssBaseline } from '@mui/material';
 import TournamentBracket from './TournamentBracket';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Breadcrumbs from '../component/CustomBreadcrumbs';
+import { getAllRegistrationsByTournamentId } from '../apis/registerAPI';
+import { useLocation, useParams } from 'react-router-dom';
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 function TournamentSchedule() {
-    const teams = [
-        "Team 1", "Team 2", "Team 3", "Team 4",
-        "Team 5", "Team 6", "Team 7", "Team 8",
-        "Team 9", "Team 10", "Team 11", "Team 12",
-        "Team 13", "Team 14", "Team 15", "Team 16"
-    ];
+    const [teams,setTeams] = useState([])
     const defaultTheme = createTheme({
         components: {
           MuiCssBaseline: {
@@ -21,12 +21,26 @@ function TournamentSchedule() {
           },
         },
       });
+    const {id} = useParams()
+    const query = useQuery()
+    const tour_name = query.get('name')
+    const fetchTeams = async() => {
+      try {
+        const data = await getAllRegistrationsByTournamentId(id)
+        setTeams(data.data)
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+    useEffect(() => {
+      fetchTeams()
+    },[])
     return (
         <ThemeProvider theme={defaultTheme}>
             <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Container component="main" maxWidth="xxl">
             <CssBaseline />
-            <h1 style={{color:'white'}}>Tournament Schedule</h1>
+            <h1 style={{color:'white'}}>{tour_name||'Tournament Schedule'}</h1>
             <TournamentBracket teams={teams} />
         </Container>
         </div>

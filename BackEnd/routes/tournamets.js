@@ -88,7 +88,7 @@ router.get('/', async (req, res) => {
     const conn = await pool.getConnection();
     try {
 
-        const tournaments = await conn.query("SELECT * FROM Tournament");
+        const tournaments = await conn.query("SELECT * FROM Tournament LEFT JOIN image_table ON Tournament.tour_id = image_table.tableId");
         res.json({data:tournaments});
     } catch (error) {
         console.error(error);
@@ -132,7 +132,7 @@ router.get('/:id', async (req, res) => {
     const conn = await pool.getConnection();
     try {
 
-        const tournament = await conn.query("SELECT * FROM Tournament WHERE tour_id = ?", [req.params.id]);
+        const tournament = await conn.query("SELECT * FROM Tournament LEFT JOIN image_table ON Tournament.tour_id = image_table.tableId WHERE Tournament.tour_id = ?", [req.params.id]);
         if (tournament.length > 0) {
             res.json({data:tournament[0]});
         } else {
@@ -253,6 +253,25 @@ router.delete('/:id', async (req, res) => {
         conn.release();
     }
 });
+
+router.put('/start/:id',async (req,res) => {
+    const conn = await pool.getConnection();
+    try {
+        const result = await conn.query("UPDATE Tournament SET status = ? WHERE tour_id = ?", 
+        [req.body.status, req.params.id]);
+        if (result.affectedRows > 0) {
+            res.send({message:'Tournament updated successfully!'});
+        } else {
+            res.status(404).send({message:'Tournament not found'});
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({message:'Server error'});
+
+    }finally {
+        conn.release();
+    }
+})
 
 /**
  * @swagger

@@ -46,6 +46,15 @@ const tournamentAPI = {
       throw error;
     }
   },
+  startTournament: async (id, data) => {
+    try {
+      const response = await axios.put(`${BASE_URL}/tournaments/start/${id}`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating tournament:', error);
+      throw error;
+    }
+  },
 
   // Delete a tournament by ID
   deleteTournament: async (id) => {

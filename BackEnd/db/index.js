@@ -4,7 +4,7 @@ const pool = mariadb.createPool({
     host: 'localhost',
     user: 'root',
     password: 'root',
-    database: 'esport',
+    database: 'esport_test',
     connectionLimit: 5
 });
 

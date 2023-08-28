@@ -52,9 +52,8 @@ CREATE TABLE `image_table` (
   `tableId` int DEFAULT NULL,
   `tableName` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `tableId_UNIQUE` (`tableId`),
-  UNIQUE KEY `tableName_UNIQUE` (`tableName`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `tableInfo` (`tableId`,`tableName`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +62,7 @@ CREATE TABLE `image_table` (
 
 LOCK TABLES `image_table` WRITE;
 /*!40000 ALTER TABLE `image_table` DISABLE KEYS */;
-INSERT INTO `image_table` VALUES (1,'image-1693208064989.jpg','http://localhost:4000/image/image-1693208064989.jpg',2,'member'),(2,'image-1693210758342.jpg','http://localhost:4000/image/image-1693210758342.jpg',3,'tournament');
+INSERT INTO `image_table` VALUES (1,'image-1693208064989.jpg','http://localhost:4000/image/image-1693208064989.jpg',2,'member'),(2,'image-1693228970162.jpg','http://localhost:4000/image/image-1693228970162.jpg',3,'tournament'),(9,'image-1693229073867.jpg','http://localhost:4000/image/image-1693229073867.jpg',8,'tournament');
 /*!40000 ALTER TABLE `image_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,16 +115,14 @@ CREATE TABLE `member` (
   `date_of_birth` date DEFAULT NULL,
   `aka` varchar(50) NOT NULL,
   `role` enum('USER','ADMIN') NOT NULL,
-  `email` varchar(100) DEFAULT NULL,
   `team_id` int DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`member_id`),
   UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`),
   KEY `member_ibfk_1` (`team_id`),
   CONSTRAINT `member_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,7 +131,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'john_doe','$2a$10$ljNkI8xjlaA9/dflzMDNIe0U8jLR3y.T38GbY0SVK/SkPwkoK8g5e','John Doe','1995-06-15','jD','ADMIN','john.doe@example.com',5,'2023-08-15 04:37:46','2023-08-26 10:57:58'),(2,'user123','$2a$10$c2ndBrFvNXzFlOUSWAcD4eWP9dTXY.ehUgSxIxkqFFx.eE7LsVnYq','user',NULL,'user','USER',NULL,NULL,'2023-08-27 06:54:33','2023-08-27 06:54:33');
+INSERT INTO `member` VALUES (1,'john_doe','$2a$10$ljNkI8xjlaA9/dflzMDNIe0U8jLR3y.T38GbY0SVK/SkPwkoK8g5e','John Doe','1995-06-15','jD','ADMIN',19,'2023-08-15 04:37:46','2023-08-28 13:39:40'),(2,'user123','$2a$10$c2ndBrFvNXzFlOUSWAcD4eWP9dTXY.ehUgSxIxkqFFx.eE7LsVnYq','user',NULL,'user','USER',20,'2023-08-27 06:54:33','2023-08-28 13:41:00'),(3,'Wasan','$2a$10$xjZWpkrGbt0yvE5hkVbavOnzvNSAiNnq7Mn77UuY/LCCX0C32Nf/.','wasab',NULL,'Smite','USER',21,'2023-08-28 14:05:52','2023-08-28 14:06:50'),(4,'Tessf','$2a$10$oQSTQVTE0lEIrlngyPIFIOdXKJPRB402dfJlHIouVUMLg1Ypvulwm','jonh',NULL,'Tessf','USER',NULL,'2023-08-28 14:08:48','2023-08-28 14:08:48');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,12 +151,13 @@ CREATE TABLE `register` (
   `status` enum('Pending','Competing','Eliminated','Winner') DEFAULT 'Pending',
   `position` int DEFAULT NULL,
   `round` enum('Pre-Quarterfinals','Quarter-finals','Semi-finals','Final') DEFAULT 'Pre-Quarterfinals',
+  `index` int DEFAULT NULL,
   PRIMARY KEY (`register_id`),
   UNIQUE KEY `team_id` (`team_id`,`tour_id`),
   KEY `tour_id` (`tour_id`),
   CONSTRAINT `register_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `team` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `register_ibfk_2` FOREIGN KEY (`tour_id`) REFERENCES `tournament` (`tour_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -168,6 +166,7 @@ CREATE TABLE `register` (
 
 LOCK TABLES `register` WRITE;
 /*!40000 ALTER TABLE `register` DISABLE KEYS */;
+INSERT INTO `register` VALUES (17,20,8,'2023-08-28 20:41:16',NULL,'Pending',NULL,'Pre-Quarterfinals',NULL);
 /*!40000 ALTER TABLE `register` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,7 +213,7 @@ CREATE TABLE `team` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`team_id`),
   UNIQUE KEY `team_name` (`team_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -223,7 +222,7 @@ CREATE TABLE `team` (
 
 LOCK TABLES `team` WRITE;
 /*!40000 ALTER TABLE `team` DISABLE KEYS */;
-INSERT INTO `team` VALUES (1,'T1','2023-08-15 04:37:08','2023-08-27 07:05:16'),(2,'T2','2023-08-21 09:54:16','2023-08-27 07:05:16'),(3,'T3','2023-08-21 09:57:19','2023-08-27 07:05:16'),(4,'T4','2023-08-26 10:56:32','2023-08-27 07:05:16'),(5,'T5','2023-08-26 10:57:58','2023-08-27 07:05:16'),(6,'T6','2023-08-26 10:57:58','2023-08-27 07:05:16'),(7,'T7','2023-08-15 04:37:08','2023-08-15 04:37:08'),(8,'T8','2023-08-21 09:54:16','2023-08-21 09:54:16'),(9,'T9','2023-08-21 09:57:19','2023-08-21 09:57:19'),(10,'T10','2023-08-26 10:56:32','2023-08-26 10:56:32'),(11,'T11','2023-08-26 10:57:58','2023-08-26 10:57:58'),(12,'T12','2023-08-26 10:57:58','2023-08-26 10:57:58'),(13,'T13','2023-08-15 04:37:08','2023-08-15 04:37:08'),(14,'T14','2023-08-21 09:54:16','2023-08-21 09:54:16'),(15,'T15','2023-08-21 09:57:19','2023-08-21 09:57:19'),(16,'T16','2023-08-26 10:56:32','2023-08-26 10:56:32'),(17,'T17','2023-08-26 10:57:58','2023-08-26 10:57:58'),(18,'T18','2023-08-26 10:57:58','2023-08-26 10:57:58');
+INSERT INTO `team` VALUES (1,'T1','2023-08-15 04:37:08','2023-08-27 07:05:16'),(2,'T2','2023-08-21 09:54:16','2023-08-27 07:05:16'),(3,'T3','2023-08-21 09:57:19','2023-08-27 07:05:16'),(4,'T4','2023-08-26 10:56:32','2023-08-27 07:05:16'),(5,'T5','2023-08-26 10:57:58','2023-08-27 07:05:16'),(6,'T6','2023-08-26 10:57:58','2023-08-27 07:05:16'),(7,'T7','2023-08-15 04:37:08','2023-08-15 04:37:08'),(8,'T8','2023-08-21 09:54:16','2023-08-21 09:54:16'),(9,'T9','2023-08-21 09:57:19','2023-08-21 09:57:19'),(10,'T10','2023-08-26 10:56:32','2023-08-26 10:56:32'),(11,'T11','2023-08-26 10:57:58','2023-08-26 10:57:58'),(12,'T12','2023-08-26 10:57:58','2023-08-26 10:57:58'),(13,'T13','2023-08-15 04:37:08','2023-08-15 04:37:08'),(14,'T14','2023-08-21 09:54:16','2023-08-21 09:54:16'),(15,'T15','2023-08-21 09:57:19','2023-08-21 09:57:19'),(16,'T16','2023-08-26 10:56:32','2023-08-26 10:56:32'),(17,'T17','2023-08-26 10:57:58','2023-08-26 10:57:58'),(18,'T18','2023-08-26 10:57:58','2023-08-26 10:57:58'),(19,'eserrer','2023-08-28 13:39:40','2023-08-28 13:39:40'),(20,'hanuman','2023-08-28 13:41:00','2023-08-28 13:41:00'),(21,'Wanon','2023-08-28 14:06:50','2023-08-28 14:06:50');
 /*!40000 ALTER TABLE `team` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -240,7 +239,6 @@ CREATE TABLE `tournament` (
   `tour_detail` varchar(255) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
-  `team_number` int NOT NULL,
   `win_condition` varchar(45) NOT NULL,
   `location` varchar(45) DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -251,7 +249,7 @@ CREATE TABLE `tournament` (
   `regis_end` date DEFAULT NULL,
   PRIMARY KEY (`tour_id`),
   UNIQUE KEY `tour_name` (`tour_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,6 +258,7 @@ CREATE TABLE `tournament` (
 
 LOCK TABLES `tournament` WRITE;
 /*!40000 ALTER TABLE `tournament` DISABLE KEYS */;
+INSERT INTO `tournament` VALUES (8,'T11234','T1123456778890','2023-08-21','2023-08-24','Single Elimination','Somewhere','2023-08-28 13:24:33','2023-08-28 12:59:09','Online','dota2','Pending','2023-08-22');
 /*!40000 ALTER TABLE `tournament` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -272,4 +271,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-28 16:25:33
+-- Dump completed on 2023-08-29  0:20:45

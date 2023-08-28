@@ -107,10 +107,12 @@ function Match({
   const classes = useStyles();
   return (
     <Tooltip
-      title={`Start Time: ${matchInfo.startTime || 'N/A'}, Location: ${matchInfo.location || 'N/A'}`}
+      title={`Start Time: ${matchInfo.startTime || "N/A"}, Location: ${
+        matchInfo.location || "N/A"
+      }`}
       arrow
     >
-      <Box my={2} position="relative" >
+      <Box my={2} position="relative">
         {showConnectLine && (
           <Box position="absolute" className="someClassForVerticalLines" />
         )}
@@ -150,7 +152,6 @@ function Match({
             ${finalHorizontalBracket ? classes.finalHorizontalBracket : ""}
             ${startHorizontalBracket ? classes.startHorizontalBracket : ""}  
           `}
-          
         >
           <Paper
             elevation={3}
@@ -205,59 +206,89 @@ function TournamentBracket({ teams }) {
       teamToRound[team.team_name] === "Quarter-finals" ||
       teamToRound[team.team_name] === "Semi-finals" ||
       teamToRound[team.team_name] === "Final"
-  );
+  ).map((team => JSON.parse(JSON.stringify(team))));
   const quarterTeams = teams.filter(
     (team) =>
       teamToRound[team.team_name] === "Quarter-finals" ||
       teamToRound[team.team_name] === "Semi-finals" ||
       teamToRound[team.team_name] === "Final"
-  );
+  ).map((team => JSON.parse(JSON.stringify(team)))).map((val) => {
+    console.log(val)
+    val.oldPosition = val.position
+    if (val.position === 7 || val.position === 6) {val.position = 3}
+    else if (val.position === 5 || val.position === 4) {val.position = 2}
+    else if  (val.position === 3 || val.position === 2) {val.position = 1}
+    else if  (val.position === 1 || val.position === 0) {val.position = 0}
+    return val
+  });
   const semiTeams = teams.filter(
     (team) =>
       teamToRound[team.team_name] === "Semi-finals" ||
       teamToRound[team.team_name] === "Final"
-  );
+  ).map((team => JSON.parse(JSON.stringify(team)))).map((val) => {
+    console.log(val)
+    val.oldPosition = val.position
+     if  (val.position === 4 || val.position === 5 || val.position === 6 || val.position === 7) {val.position = 1}
+    else if  (val.position === 1 || val.position === 0 || val.position === 3 || val.position === 2) {val.position = 0}
+    return val
+  });;
   const finalTeams = teams.filter(
     (team) => teamToRound[team.team_name] === "Final"
-  );
+  ).map((team => JSON.parse(JSON.stringify(team))));
+  const firstRoundGroups = [0, 1, 2, 3, 4, 5, 6, 7];
+  const secondRoundGroups = [0, 1, 2, 3];
+  const thirdRoundGroups = [0, 1];
+  const customSort = (a, b) => {
+    // Check if both oldPosition and position are 0 for a and b
+    const aIsTop = a.oldPosition === 0 && a.position === 0;
+    const bIsTop = b.oldPosition === 0 && b.position === 0;
+  
+    // If a should be at the top and b shouldn't, return -1
+    if (aIsTop && !bIsTop) return -1;
+  
+    // If b should be at the top and a shouldn't, return 1
+    if (bIsTop && !aIsTop) return 1;
+  
+    // Otherwise, sort by oldPosition
+    return a.oldPosition - b.oldPosition;
+  };
   return (
     <Grid container spacing={4}>
       {/* Round of 16 */}
       <Grid item xs={3} style={{ paddingLeft: "60px" }}>
-        {Array(8)
-          .fill()
-          .map((_, idx) => (
+        {firstRoundGroups.map((group, idx) => {
+          const team = preQuarterTeams.filter((val) => {
+            return val.position === group;
+          });
+          const team1 = team.find(val => val.index === 0)
+          const team2 = team.find(val => val.index === 1)
+          return (
             <Match
               key={idx}
               matchInfo={{
-                startTime: preQuarterTeams[idx]?.date_time,
-                location: preQuarterTeams[idx]?.location,
+                startTime: team1?.date_time,
+                location: team1?.location,
               }}
-              team1={
-                preQuarterTeams[idx] ? preQuarterTeams[idx].team_name : "TBD"
-              }
-              team2={
-                preQuarterTeams[15 - idx]
-                  ? preQuarterTeams[15 - idx].team_name
-                  : "TBD"
-              }
+              team1={team1 ? team1.team_name : "TBD"}
+              team2={team2 ? team2.team_name : "TBD"}
               showConnectLine={idx % 2 === 0 && idx !== 8}
               showHorizontalBracket
               winner={
-                preQuarterTeams[idx] &&
-                (preQuarterTeams[idx].round === "Quarter-finals" ||
-                  preQuarterTeams[idx].round === "Semi-finals" ||
-                  preQuarterTeams[idx].round === "Final")
-                  ? preQuarterTeams[idx].team_name
-                  : preQuarterTeams[15 - idx] &&
-                    (preQuarterTeams[15 - idx].round === "Quarter-finals" ||
-                      preQuarterTeams[15 - idx].round === "Semi-finals" ||
-                      preQuarterTeams[15 - idx].round === "Final")
-                  ? preQuarterTeams[15 - idx].team_name
+                team1 &&
+                (team1.round === "Quarter-finals" ||
+                  team1.round === "Semi-finals" ||
+                  team1.round === "Final")
+                  ? team1.team_name
+                  : team2 &&
+                    (team2.round === "Quarter-finals" ||
+                      team2.round === "Semi-finals" ||
+                      team2.round === "Final")
+                  ? team2.team_name
                   : "N/A"
               }
             />
-          ))}
+          );
+        })}
       </Grid>
 
       {/* Quarter-finals */}
@@ -268,99 +299,60 @@ function TournamentBracket({ teams }) {
           justifyContent="center"
           height="100%"
         >
-          <Match
-            key={0}
-            matchInfo={{
-              startTime: quarterTeams[0]?.date_time,
-              location: quarterTeams[0]?.location,
-            }}
-            team1={quarterTeams[0] ? quarterTeams[0].team_name : "TBD"}
-            team2={quarterTeams[7] ? quarterTeams[7].team_name : "TBD"}
-            showHorizontalBracket
-            startHorizontalBracket
-            showQuaterLine
-            winner={
-              quarterTeams[0] &&
-              (quarterTeams[0].round === "Semi-finals" ||
-                quarterTeams[0].round === "Final")
-                ? quarterTeams[0].team_name
-                : quarterTeams[7] &&
-                  (quarterTeams[7].round === "Semi-finals" ||
-                    quarterTeams[7].round === "Final")
-                ? quarterTeams[7].team_name
-                : "N/A"
+          {secondRoundGroups.map((group, idx) => {
+          console.log("preQteam",quarterTeams)
+            const team = quarterTeams.filter((val) => {
+              return val.position === group;
+            });
+            
+            var teamArray1 = team.filter(val => val.index === 0).sort(customSort)
+            var teamArray2 = team.filter(val => val.index === 1).sort(customSort)
+            console.log("Array1",teamArray1)
+            console.log("Array1",teamArray2)
+            var team1
+            var team2 
+            if(teamArray1.length > 1) {
+              team1 = teamArray1[0]
+              team2 = teamArray1[1]
+            }else{
+              team1 = team.sort(customSort)[0]
             }
-          />
-          <BlankSpace />
-          <Match
-            key={1}
-            matchInfo={{
-              startTime: quarterTeams[1]?.date_time,
-              location: quarterTeams[1]?.location,
-            }}
-            team1={quarterTeams[1] ? quarterTeams[1].team_name : "TBD"}
-            team2={quarterTeams[6] ? quarterTeams[6].team_name : "TBD"}
-            showHorizontalBracket
-            startHorizontalBracket
-            winner={
-              quarterTeams[1] &&
-              (quarterTeams[1].round === "Semi-finals" ||
-                quarterTeams[1].round === "Final")
-                ? quarterTeams[1].team_name
-                : quarterTeams[6] &&
-                  (quarterTeams[6].round === "Semi-finals" ||
-                    quarterTeams[6].round === "Final")
-                ? quarterTeams[6].team_name
-                : "N/A"
+            if(teamArray2.length > 1) {
+              team1 = teamArray2[0]
+              team2 = teamArray2[1]
+            }else{
+              team2 = team.sort(customSort)[1]
             }
-          />
-          <BlankSpace />
-          <Match
-            key={2}
-            matchInfo={{
-              startTime: quarterTeams[2]?.date_time,
-              location: quarterTeams[2]?.location,
-            }}
-            team1={quarterTeams[2] ? quarterTeams[2].team_name : "TBD"}
-            team2={quarterTeams[4] ? quarterTeams[4].team_name : "TBD"}
-            showHorizontalBracket
-            startHorizontalBracket
-            showQuaterLine
-            winner={
-              quarterTeams[2] &&
-              (quarterTeams[2].round === "Semi-finals" ||
-                quarterTeams[2].round === "Final")
-                ? quarterTeams[2].team_name
-                : quarterTeams[4] &&
-                  (quarterTeams[4].round === "Semi-finals" ||
-                    quarterTeams[4].round === "Final")
-                ? quarterTeams[4].team_name
-                : "N/A"
-            }
-          />
-          <BlankSpace />
-          <Match
-            key={3}
-            matchInfo={{
-              startTime: quarterTeams[3]?.date_time,
-              location: quarterTeams[3]?.location,
-            }}
-            team1={quarterTeams[3] ? quarterTeams[3].team_name : "TBD"}
-            team2={quarterTeams[5] ? quarterTeams[5].team_name : "TBD"}
-            showHorizontalBracket
-            startHorizontalBracket
-            winner={
-              quarterTeams[3] &&
-              (quarterTeams[3].round === "Semi-finals" ||
-                quarterTeams[3].round === "Final")
-                ? quarterTeams[3].team_name
-                : quarterTeams[5] &&
-                  (quarterTeams[5].round === "Semi-finals" ||
-                    quarterTeams[5].round === "Final")
-                ? quarterTeams[5].team_name
-                : "N/A"
-            }
-          />
+            console.log(team)
+            return (
+              <>
+                {idx !== 0 && <BlankSpace />}
+                <Match
+                  key={idx}
+                  matchInfo={{
+                    startTime: team1?.date_time,
+                    location: team1?.location,
+                  }}
+                  team1={team1 ? team1.team_name : "TBD"}
+                  team2={team2 ? team2.team_name : "TBD"}
+                  showHorizontalBracket
+                  startHorizontalBracket
+                  showQuaterLine={group === 0 || group === 2}
+                  winner={
+                    team1 &&
+                    (team1.round === "Semi-finals" ||
+                      team1.round === "Final")
+                      ? team1.team_name
+                      : team2 &&
+                        (team2.round === "Semi-finals" ||
+                          team2.round === "Final")
+                      ? team2.team_name
+                      : "N/A"
+                  }
+                />
+              </>
+            );
+          })}
         </Box>
       </Grid>
 
@@ -372,44 +364,59 @@ function TournamentBracket({ teams }) {
           justifyContent="center"
           height="100%"
         >
-          <Match
-            matchInfo={{
-              startTime: semiTeams[0]?.date_time,
-              location: semiTeams[0]?.location,
-            }}
-            team1={semiTeams[0] ? semiTeams[0].team_name : "TBD"}
-            team2={semiTeams[3] ? semiTeams[3].team_name : "TBD"}
-            showHorizontalBracket
-            startHorizontalBracket
-            winner={
-              semiTeams[0] && semiTeams[0].round === "Final"
-                ? semiTeams[0].team_name
-                : semiTeams[3] && semiTeams[3].round === "Final"
-                ? semiTeams[3].team_name
-                : "N/A"
+          {thirdRoundGroups.map((group, idx) => {
+            const team = semiTeams.filter((val) => {
+              if (val.position >= 2) val.position = 2
+              return val.position === group;
+            });
+            var teamArray1 = team.filter(val => val.index === 0).sort(customSort)
+            var teamArray2 = team.filter(val => val.index === 1).sort(customSort)
+            console.log("Array1",teamArray1)
+            console.log("Array1",teamArray2)
+            var team1
+            var team2 
+            if(teamArray1.length > 1) {
+              team1 = teamArray1[0]
+              team2 = teamArray1[1]
+            }else{
+              team1 = team.sort(customSort)[0]
             }
-          />
-          <BlankSpace />
-          <BlankSpace />
-          <BlankSpace />
-          <BlankSpace />
-          <Match
-            matchInfo={{
-              startTime: semiTeams[1]?.date_time,
-              location: semiTeams[1]?.location,
-            }}
-            team1={semiTeams[1] ? semiTeams[1].team_name : "TBD"}
-            team2={semiTeams[2] ? semiTeams[2].team_name : "TBD"}
-            showHorizontalBracket
-            startHorizontalBracket
-            winner={
-              semiTeams[1] && semiTeams[1].round === "Final"
-                ? semiTeams[1].team_name
-                : semiTeams[2] && semiTeams[2].round === "Final"
-                ? semiTeams[2].team_name
-                : "N/A"
+            if(teamArray2.length > 1) {
+              team1 = teamArray2[0]
+              team2 = teamArray2[1]
+            }else{
+              team2 = team.sort(customSort)[1]
             }
-          />
+            return (
+              <>
+                {idx === 1 && (
+                  <>
+                    <BlankSpace />
+                    <BlankSpace />
+                    <BlankSpace />
+                    <BlankSpace />
+                  </>
+                )}
+                <Match
+                  matchInfo={{
+                    startTime: team[0]?.date_time,
+                    location: team[0]?.location,
+                  }}
+                  team1={team[0] ? team[0].team_name : "TBD"}
+                  team2={team[1] ? team[1].team_name : "TBD"}
+                  showHorizontalBracket
+                  startHorizontalBracket
+                  winner={
+                    team[0] && team[0].round === "Final"
+                      ? team[0].team_name
+                      : team[1] && team[1].round === "Final"
+                      ? team[1].team_name
+                      : "N/A"
+                  }
+                />
+              </>
+            );
+          })}
         </Box>
       </Grid>
 

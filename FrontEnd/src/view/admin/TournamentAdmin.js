@@ -62,9 +62,11 @@ function TournamentAdmin() {
       }
     } else {
       try {
-        await TournamentAPI.createTournament(formData);
+        await TournamentAPI.createTournament(formData).then(async(res) => {
+          console.log(res)
+          await uploadImage(res.data.insertId, image, "tournament");
+        });
         fetchTournaments();
-        await uploadImage(selectedTournament.tour_id, image, "tournament");
         setNotification({
           title: 'Success',
           description: 'Successfully createTournament.',

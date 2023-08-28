@@ -115,7 +115,7 @@ export default function TournamentDetail({ setTournamentData }) {
                     </Grid>
                     <Grid item xs={10}>
                       {/* Details for GroupsIcon */}
-                      <div style={{ color: '#FF8C00' }}>- รับสมัครจำนวน {tournamentDetails.data.team_number} ทีม</div>
+                      <div style={{ color: '#FF8C00' }}>- รับสมัครจำนวน 16 ทีม</div>
                     </Grid>
                     <Grid item xs={2}>
                       <svg

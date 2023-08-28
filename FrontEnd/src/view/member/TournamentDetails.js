@@ -38,7 +38,6 @@ export default function TournamentDetails() {
 
   const [hasTeam, setHasTeam] = React.useState(0); // Set to true if the user has a team
   const { id } = useParams();
-  const isUserRegistered = true;
   const { user } = useUser();
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -109,17 +108,20 @@ export default function TournamentDetails() {
                 <TournamentDetail setTournamentData={setTournamentData} />
               </Box>
               <Box>
-              <Button
+                <Button
                   fullWidth
                   variant="contained"
                   href={`/member/Schedule/${id}?name=${tournamentData.data.tour_name}`}
                   sx={{
-                    mt: 3, mb: 2,
+                    mt: 3,
+                    mb: 2,
                     fontWeight: 600,
-                    backgroundImage: 'linear-gradient(to right, #224db0, #3f3732)',
-                    '&:hover': {
+                    backgroundImage:
+                      "linear-gradient(to right, #224db0, #3f3732)",
+                    "&:hover": {
                       // Adjust the hover gradient or other styles if needed
-                      backgroundImage: 'linear-gradient(to right, #1e439a, #332d29)'
+                      backgroundImage:
+                        "linear-gradient(to right, #1e439a, #332d29)",
                     },
                   }}
                 >
@@ -161,24 +163,27 @@ export default function TournamentDetails() {
                     </Typography>
                   </>
                 )}
-                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  disabled={!hasTeam} // Disable the button if the user doesn't have a team
-                  sx={{
-                    mt: 3, mb: 2,
-                    fontWeight: 600,
-                    backgroundImage: 'linear-gradient(to right, #224db0, #3f3732)',
-                    '&:hover': {
-                      // Adjust the hover gradient or other styles if needed
-                      backgroundImage: 'linear-gradient(to right, #1e439a, #332d29)'
-                    },
-                  }}
-                >
-                  Register
-                </Button>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    disabled={!hasTeam} // Disable the button if the user doesn't have a team
+                    sx={{
+                      mt: 3,
+                      mb: 2,
+                      fontWeight: 600,
+                      backgroundImage:
+                        "linear-gradient(to right, #224db0, #3f3732)",
+                      "&:hover": {
+                        // Adjust the hover gradient or other styles if needed
+                        backgroundImage:
+                          "linear-gradient(to right, #1e439a, #332d29)",
+                      },
+                    }}
+                  >
+                    Register
+                  </Button>
                 </div>
               </Box>
             </div>

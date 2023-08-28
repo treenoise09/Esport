@@ -20,6 +20,8 @@ const CreateTeam = () => {
     members: [""],
   });
 
+  const isTeamValid = team.members.length >= 6;
+
   const handleChange = (e, index) => {
     if (e.target.name.startsWith("member")) {
       const updatedMembers = [...team.members];
@@ -89,9 +91,15 @@ const CreateTeam = () => {
           Add Member
         </Grid>
         <Grid item xs={12}>
+          {!isTeamValid && (
+            <Typography color="error">
+              Need at least six members to create a team.
+            </Typography>
+          )}
           <Button
             variant="contained"
             type="submit"
+            disabled={!isTeamValid}
             sx={{
               mt: 3,
               mb: 2,

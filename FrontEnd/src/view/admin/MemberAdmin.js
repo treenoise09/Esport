@@ -3,11 +3,15 @@ import MemberAPI from "../../apis/memberAPI";
 import MemberForm from "../../component/MemberForm";
 import MemberList from "../../component/MemberList";
 import { Container } from "@mui/material";
-
+import NotificationModal from "../../component/NotificationModal";
 function MemberAdmin() {
   const [members, setMembers] = useState([]);
   const [selectedMember, setSelectedMember] = useState(null);
-
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [notification, setNotification] = React.useState({
+    title: '',
+    description: '',
+  });
   useEffect(() => {
     fetchMembers();
   }, []);
@@ -15,8 +19,9 @@ function MemberAdmin() {
     try {
       const response = await MemberAPI.getAllMembers();
       setMembers(response.data);
+      
     } catch (error) {
-      console.error("Failed to fetch members:", error);
+      console.log(error)
     }
   };
 
@@ -25,17 +30,34 @@ function MemberAdmin() {
         await MemberAPI.updateMember(selectedMember.member_id, formData);
         fetchMembers();
         setSelectedMember(null);
+        setNotification({
+          title: 'Success',
+          description: 'Successfully updateMember.',
+        });
       } catch (error) {
-        console.error("Failed to update member:", error);
+        setNotification({
+          title: 'Failure',
+          description: 'Failed to updateMember.',
+        });
+      } finally {
+        setIsModalOpen(true);
       }
-  };
+    };
 
   const handleDelete = async (memberId) => {
     try {
       await MemberAPI.deleteMember(memberId);
-      fetchMembers();
+      fetchMembers();setNotification({
+        title: 'Success',
+        description: 'Successfully deleteMember.',
+      });
     } catch (error) {
-      console.error("Failed to delete member:", error);
+      setNotification({
+        title: 'Failure',
+        description: 'Failed to deleteMember.',
+      });
+    } finally {
+      setIsModalOpen(true);
     }
   };
 
@@ -47,6 +69,12 @@ function MemberAdmin() {
         members={members}
         onEdit={setSelectedMember}
         onDelete={handleDelete}
+      />
+      <NotificationModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={notification.title}
+        description={notification.description}
       />
     </Container>
   );

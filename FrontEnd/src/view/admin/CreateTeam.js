@@ -7,12 +7,16 @@ import {
   Grid,
   IconButton,
 } from "@mui/material";
-
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-
 import teamAPI from "../../apis/teamAPI";
+import NotificationModal from "../../component/NotificationModal";
 
 const CreateTeam = () => {
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [notification, setNotification] = React.useState({
+    title: '',
+    description: '',
+  });
 
 
   const [team, setTeam] = useState({
@@ -48,11 +52,21 @@ const CreateTeam = () => {
       .createTeam(team)
       .then((response) => {
         console.log("Team created:", response);
+        setNotification({
+          title: 'Success',
+          description: 'Successfully created the team.',
+        });
       })
       .catch((error) => {
-        console.error("Error creating team:", error);
+        setNotification({
+          title: 'Failure',
+          description: 'Could not create the team.',
+        });
+      })
+      .finally(() => {
+        setIsModalOpen(true);
       });
-  };
+      };
 
   return (
     <form onSubmit={handleSubmit} style={{padding:'10px'}}>
@@ -114,6 +128,12 @@ const CreateTeam = () => {
           </Button>
         </Grid>
       </Grid>
+      <NotificationModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={notification.title}
+        description={notification.description}
+      />
     </form>
   );
 };

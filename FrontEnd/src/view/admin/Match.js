@@ -4,6 +4,7 @@ import MatchForm from "../../component/MatchForm";
 import MatchList from "../../component/MatchList";
 import { Container } from "@mui/system";
 import { makeStyles } from "@mui/styles";
+import NotificationModal from "../../component/NotificationModal";
 const useStyles = makeStyles({
     formContainer: {
       padding: "20px",
@@ -21,6 +22,11 @@ const useStyles = makeStyles({
   });
 
 function Match() {
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [notification, setNotification] = React.useState({
+    title: '',
+    description: '',
+  });
   const [matches, setMatches] = useState([]);
   const [selectedMatch, setSelectedMatch] = useState(null);
   const classes = useStyles();
@@ -45,26 +51,52 @@ function Match() {
         await MatchAPI.updateMatch(selectedMatch.match_id, formData);
         fetchMatches();
         setSelectedMatch(null);
+        setNotification({
+          title: 'Success',
+          description: 'Successfully updateMatch for the tournament.',
+        });
       } catch (error) {
-        console.error("Failed to update match:", error);
+        setNotification({
+          title: 'Failure',
+          description: 'failed to updateMatch for this tournament.',
+        });
+      } finally {
+        setIsModalOpen(true);
       }
     } else {
       // Create new match
       try {
         await MatchAPI.createMatch(formData);
         fetchMatches();
+        setNotification({
+          title: 'Success',
+          description: 'Successfully createMatch for the tournament.',
+        });
       } catch (error) {
-        console.error("Failed to create match:", error);
+        setNotification({
+          title: 'Failure',
+          description: 'failed to createMatch for this tournament.',
+        });
+      } finally {
+        setIsModalOpen(true);
       }
-    }
+    };
   };
 
   const handleDelete = async (matchId) => {
     try {
       await MatchAPI.deleteMatch(matchId);
-      fetchMatches();
+      fetchMatches();setNotification({
+        title: 'Success',
+        description: 'Successfully deleteMatch for the tournament.',
+      });
     } catch (error) {
-      console.error("Failed to delete match:", error);
+      setNotification({
+        title: 'Failure',
+        description: 'failed to deleteMatch for this tournament.',
+      });
+    } finally {
+      setIsModalOpen(true);
     }
   };
 
@@ -77,6 +109,12 @@ function Match() {
           onDelete={handleDelete}
           onEdit={setSelectedMatch}
         />
+        <NotificationModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={notification.title}
+        description={notification.description}
+      />
       </div>
   );
 }

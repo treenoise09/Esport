@@ -8,8 +8,7 @@ const tournamentAPI = {
     
     try {
       const response = await axios.post(`${BASE_URL}/tournaments`, data);
-      const jason = JSON.parse(response);
-      return jason.data;
+      return response.data;
     } catch (error) {
       console.error('Error creating tournament:', error);
       throw error;

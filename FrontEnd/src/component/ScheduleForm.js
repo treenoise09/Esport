@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { TextField, Button } from "@mui/material";
-
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 function ScheduleForm({ onSubmit, initialData }) {
   const [formData, setFormData] = useState(
     initialData || {
@@ -33,15 +32,22 @@ function ScheduleForm({ onSubmit, initialData }) {
         onChange={handleChange}
         required
       />
-      <TextField
-        margin="normal"
-        fullWidth
-        label="Round"
-        name="round"
-        value={formData.round}
-        onChange={handleChange}
-        required
-      />
+<FormControl fullWidth variant="outlined" required margin="normal">
+  <InputLabel>Round</InputLabel>
+  <Select
+    labelId="round-label"
+    id="round"
+    name="round"
+    value={formData.round}
+    onChange={handleChange}
+    label="Round"
+  >
+    <MenuItem value={"Pre-Quarterfinals"}>Pre-Quarterfinals</MenuItem>
+    <MenuItem value={"Quarter-finals"}>Quarter-finals</MenuItem>
+    <MenuItem value={"Semi-finals"}>Semi-finals</MenuItem>
+    <MenuItem value={"Final"}>Final</MenuItem>
+  </Select>
+</FormControl>
       <TextField
         margin="normal"
         fullWidth

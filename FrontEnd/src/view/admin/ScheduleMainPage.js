@@ -2,10 +2,15 @@ import React, { useState, useEffect } from "react";
 import { getAllSchedules, createSchedule, updateSchedule, deleteSchedule } from "../../apis/scheduleAPI";
 import ScheduleForm from "../../component/ScheduleForm";
 import { Table, TableHead, TableRow, TableCell, TableBody, Button, TableContainer, Paper } from "@mui/material";
-
+import NotificationModal from "../../component/NotificationModal";
 function ScheduleMainPage() {
     const [schedules, setSchedules] = useState([]);
     const [selectedSchedule, setSelectedSchedule] = useState(null);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [notification, setNotification] = React.useState({
+      title: '',
+      description: '',
+    });
     useEffect(() => {
         fetchSchedules();
     }, []);
@@ -22,8 +27,18 @@ function ScheduleMainPage() {
     const handleFormSubmit = async (formData) => {
         if (selectedSchedule) {
             await updateSchedule(selectedSchedule.schedule_id, formData);
-        } else {
+            setNotification({
+                title: 'Success',
+                description: 'Successfully updateSchedule.',
+              });
+              setIsModalOpen(true)
+            } else {
             await createSchedule(formData);
+            setNotification({
+                title: 'Success',
+                description: 'Successfully createSchedule.',
+              });
+              setIsModalOpen(true)
         }
         fetchSchedules();
         setSelectedSchedule(null);
@@ -35,6 +50,11 @@ function ScheduleMainPage() {
 
     const handleDelete = async (id) => {
         await deleteSchedule(id);
+        setNotification({
+            title: 'Success',
+            description: 'Successfully deleteSchedule.',
+          });
+          setIsModalOpen(true)
         fetchSchedules();
     };
 
@@ -71,7 +91,12 @@ function ScheduleMainPage() {
                 </TableBody>
             </Table>
             </TableContainer>
-
+            <NotificationModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={notification.title}
+        description={notification.description}
+      />
         </div>
     );
 }

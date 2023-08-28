@@ -13,6 +13,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import NotificationModal from "./NotificationModal";
 const useStyles = makeStyles({
   formContainer: {
     padding: "20px",
@@ -36,6 +37,11 @@ const styles = {
 };
 function TournamentForm({ onSubmit, initialData }) {
   const classes = useStyles();
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [notification, setNotification] = React.useState({
+    title: '',
+    description: '',
+  });
   const [tournament, setTournament] = useState(
     initialData || {
       tour_name: "",
@@ -58,29 +64,64 @@ function TournamentForm({ onSubmit, initialData }) {
     if (tournament.tour_name.length < 3) {
       tempErrors.tour_name =
         "Tournament name must be at least 3 characters long";
+        setNotification({
+          title: 'Failure',
+          description: 'Tournament name must be at least 3 characters long.',
+        });
+        setIsModalOpen(true);
     }
     if (!imageFile) {
       tempErrors["image"] = "Please upload a valid Image";
+      setNotification({
+      title: 'Failure',
+      description: 'Please upload a valid Image.',
+    });
+    setIsModalOpen(true);
     }
 
     if (tournament.tour_detail.length < 10) {
       tempErrors.tour_detail =
         "Tournament detail must be at least 10 characters long";
+        setNotification({
+      title: 'Failure',
+      description: 'Tournament detail must be at least 10 characters long.',
+    });
+    setIsModalOpen(true);
     }
 
     if (!tournament.start_date) {
       tempErrors.start_date = "Start date is required";
+      setNotification({
+      title: 'Failure',
+      description: 'Start date is required.',
+    });
+    setIsModalOpen(true);
     }
 
     if (!tournament.end_date) {
       tempErrors.end_date = "End date is required";
+      setNotification({
+      title: 'Failure',
+      description: 'End date is required.',
+    });
+    setIsModalOpen(true);
     }
     if (!tournament.win_condition) {
       tempErrors.win_condition = "Please select a win condition";
+      setNotification({
+      title: 'Failure',
+      description: 'Please select a win condition.',
+    });
+    setIsModalOpen(true);
     }
 
     if (!tournament.location || tournament.location.length < 3) {
       tempErrors.location = "Location should be at least 3 characters long";
+      setNotification({
+      title: 'Failure',
+      description: 'Location should be at least 3 characters long.',
+    });
+    setIsModalOpen(true);
     }
 
     setErrors(tempErrors);
@@ -97,15 +138,14 @@ function TournamentForm({ onSubmit, initialData }) {
     e.preventDefault();
     if (validateForm()) {
       try {
-        onSubmit(tournament, imageFile);
-
-        // Handle success, maybe redirect or show a success message
+        await onSubmit(tournament, imageFile);  // Make sure this returns a Promise
+        // Handle other success actions, like redirecting
       } catch (error) {
         console.error("Error creating tournament:", error);
-        // Handle error, maybe show an error message to the user
       }
     }
   };
+  
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -444,6 +484,12 @@ function TournamentForm({ onSubmit, initialData }) {
           </Button>
         </Grid>
       </Grid>
+      <NotificationModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={notification.title}
+        description={notification.description}
+      />
     </form>
   );
 }

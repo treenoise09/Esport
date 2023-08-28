@@ -102,7 +102,7 @@ function Match() {
 
   return (
       <div style={{padding:'10px'}}>
-        <h1>Match CRUD</h1>
+        <h1>Match Manager</h1>
         <MatchForm key={selectedMatch ? selectedMatch.match_id : 'create'} onSubmit={handleFormSubmit} initialData={selectedMatch} />
         <MatchList
           matches={matches}

@@ -40,7 +40,6 @@ const MatchForm = ({ initialData, onSubmit }) => {
         >
           <MenuItem value={"Win"}>Win</MenuItem>
           <MenuItem value={"Loss"}>Loss</MenuItem>
-          <MenuItem value={"Draw"}>Draw</MenuItem>
         </Select>
       </FormControl>
 

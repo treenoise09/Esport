@@ -11,6 +11,10 @@ const useStyles = makeStyles({
     verticalAlign: "middle",
     lineHeight: 2,
     textAlign: "center",
+    width: '15vh',
+    whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis'
   },
   horizontalBracket: {
     position: "relative",

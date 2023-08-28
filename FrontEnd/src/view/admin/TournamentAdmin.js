@@ -103,7 +103,7 @@ function TournamentAdmin() {
 
   return (
     <div style={{ padding: "10px" }}>
-      <h1>Tournament CRUD</h1>
+      <h1>Tournament Organizer</h1>
       <TournamentForm
         key={selectedTournament ? selectedTournament.tour_id : "create"}
         onSubmit={handleFormSubmit}

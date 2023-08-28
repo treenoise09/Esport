@@ -17,7 +17,7 @@ function TournamentList({ tournaments, onEdit, onDelete }) {
           <TableCell>Details</TableCell>
           <TableCell>Start Date</TableCell>
           <TableCell>End Date</TableCell>
-          <TableCell>Team Number</TableCell>
+          <TableCell>Register End Date</TableCell>
           <TableCell>Win Condition</TableCell>
           <TableCell>Location</TableCell>
           <TableCell>Type</TableCell>
@@ -35,7 +35,7 @@ function TournamentList({ tournaments, onEdit, onDelete }) {
             <TableCell>{tournament.tour_detail}</TableCell>
             <TableCell>{tournament.start_date}</TableCell>
             <TableCell>{tournament.end_date}</TableCell>
-            <TableCell>{tournament.team_number}</TableCell>
+            <TableCell>{tournament.regis_end}</TableCell>
             <TableCell>{tournament.win_condition}</TableCell>
             <TableCell>{tournament.location}</TableCell>
             <TableCell>{tournament.type}</TableCell>

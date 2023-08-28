@@ -50,7 +50,7 @@ export default function Profile() {
   const handleClose = () => setOpen(false);
   const handleFileChange = (e) => setFile(e.target.files[0]);
   const handleUpload = async () => {
-    await uploadImage(id, file);
+    await uploadImage(id, file,'member');
     handleClose();
   };
 

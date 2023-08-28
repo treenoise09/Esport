@@ -53,23 +53,27 @@ app.use("/tournaments", tournament);
 app.use("/matches", match);
 app.use("/schedules", schedule);
 app.use("/register", register);
-app.post("/image", upload.single("image"), (req, res) => {
+app.post("/image", upload.single("image"), async (req, res) => {
   const imageUrl = `http://localhost:4000/image/${req.file.filename}`; // Replace with your actual server URL
-  const { id } = req.query;
-  // Insert image URL into the database
+  const { id, tableName } = req.query;
+
   const sql = `
-  INSERT INTO image_table (img_name, image, tableId) 
-  VALUES (?, ?, ?) 
-  ON DUPLICATE KEY UPDATE img_name = VALUES(img_name), image = VALUES(image)
+    INSERT INTO image_table (img_name, image, tableId, tableName) 
+    VALUES (?, ?, ?, ?) 
+    ON DUPLICATE KEY UPDATE img_name = VALUES(img_name), image = VALUES(image)
   `;
-  pool.query(sql, [req.file.filename, imageUrl, id], (err, result) => {
-    if (err) {
-      console.error("Error inserting into database:", err);
-      return res.status(500).json({ error: "Failed to insert into database" });
-    }
+
+  try {
+    const conn = await pool.getConnection();
+    await conn.query(sql, [req.file.filename, imageUrl, id, tableName]);
+    conn.release();
     res.json({ message: "Image uploaded and database updated", imageUrl });
-  });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Failed to insert into database" });
+  }
 });
+
 app.get("/image/:imageName", (req, res) => {
   const imageName = req.params.imageName;
 

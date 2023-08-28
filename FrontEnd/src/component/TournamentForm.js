@@ -112,6 +112,18 @@ function TournamentForm({ onSubmit, initialData }) {
     setImageFile(file);
     setIsNewImg(true);
   };
+  const displayImage = () => {
+    if (isNewImg && imageFile) {
+      return URL.createObjectURL(imageFile);
+    }
+    if (tournament.image) {
+      return tournament.image;
+    }
+    if (imageFile) {
+      return URL.createObjectURL(imageFile);
+    }
+    return ""; // or return a placeholder image URL
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -136,17 +148,7 @@ function TournamentForm({ onSubmit, initialData }) {
               onChange={handleImageChange}
               style={{ marginBottom: "10px" }}
             />
-            <img
-              src={
-                isNewImg
-                  ? URL.createObjectURL(imageFile)
-                  : tournament.image ||
-                    (imageFile ? URL.createObjectURL(imageFile) : "")
-              }
-              alt="Preview"
-              width={100}
-              height={100}
-            />
+            <img src={displayImage()} alt="Preview" width={100} height={100} />
           </Box>
         </Grid>
         <Grid item xs={12}>
@@ -395,7 +397,7 @@ function TournamentForm({ onSubmit, initialData }) {
             </RadioGroup>
           </FormControl>
         </Grid>
-        <Grid item xs={12} container justifyContent="flex-end" gap={'10px'}>
+        <Grid item xs={12} container justifyContent="flex-end" gap={"10px"}>
           <Button
             variant="contained"
             sx={{

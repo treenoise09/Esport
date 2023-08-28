@@ -91,20 +91,22 @@ router.post("/", registerValidation, async (req, res) => {
  */
 router.get("/", async (req, res) => {
   const conn = await pool.getConnection();
-  const {tour_id} = req.query
+  const { tour_id } = req.query;
   try {
     let registrations;
-    if(tour_id){
-      registrations = await conn.query(`
+    if (tour_id) {
+      registrations = await conn.query(
+        `
       SELECT Register.*, Team.team_name, Schedule.date_time, Schedule.location
       FROM Register
       JOIN Team ON Register.team_id = Team.team_id
       LEFT JOIN Schedule ON Register.register_id = Schedule.register_id
       WHERE Register.tour_id = ?;
-    `, [tour_id]);
-    }else{
+    `,
+        [tour_id]
+      );
+    } else {
       registrations = await conn.query("SELECT * FROM Register");
-
     }
     res.json({ data: registrations });
   } catch (error) {
@@ -226,8 +228,15 @@ router.put("/:id", registerValidation, async (req, res) => {
 
   try {
     const result = await conn.query(
-      "UPDATE Register SET team_id = ?, tour_id = ?,status = ?, round = ?  WHERE register_id = ?",
-      [req.body.team_id, req.body.tour_id,req.body.status,req.body.round, req.params.id]
+      "UPDATE Register SET team_id = ?, tour_id = ?,status = ?, round = ?,index = ?  WHERE register_id = ?",
+      [
+        req.body.team_id,
+        req.body.tour_id,
+        req.body.status,
+        req.body.round,
+        req.body.index,
+        req.params.id,
+      ]
     );
     if (result.affectedRows > 0) {
       res.send({ message: "Registration updated successfully!" });
@@ -275,7 +284,7 @@ router.put("/:id", registerValidation, async (req, res) => {
  *                      $ref: '#/definitions/ResponseError'
  */
 router.put("/bulk/update", async (req, res) => {
-  console.log("Get in")
+  console.log("Get in");
   const conn = await pool.getConnection();
   try {
     const registrations = req.body;
@@ -285,8 +294,13 @@ router.put("/bulk/update", async (req, res) => {
 
     for (const registration of registrations) {
       await conn.query(
-        "UPDATE Register SET status = ?, position = ? WHERE register_id = ?",
-        [registration.status,registration.position, registration.register_id]
+        "UPDATE Register SET status = ?, position = ?,index = ? WHERE register_id = ?",
+        [
+          registration.status,
+          registration.position,
+          registration.index,
+          registration.register_id,
+        ]
       );
     }
 
@@ -303,7 +317,6 @@ router.put("/bulk/update", async (req, res) => {
     if (conn) conn.release(); // Ensure connection is released
   }
 });
-
 
 /**
  * @swagger

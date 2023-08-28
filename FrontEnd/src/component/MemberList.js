@@ -10,12 +10,9 @@ function MemberList({ members, onEdit, onDelete }) {
       <TableHead>
         <TableRow>
         <TableCell>Username</TableCell>
-          <TableCell>Password</TableCell>
           <TableCell>Name</TableCell>
-          <TableCell>Date of Birth</TableCell>
           <TableCell>AKA</TableCell>
           <TableCell>Role</TableCell>
-          <TableCell>Email</TableCell>
           <TableCell>Team ID</TableCell>
           <TableCell>Actions</TableCell>
         </TableRow>
@@ -25,10 +22,8 @@ function MemberList({ members, onEdit, onDelete }) {
           <TableRow key={member.member_id}>
             <TableCell>{member.username}</TableCell>
             <TableCell>{member.name}</TableCell>
-            <TableCell>{member.date_of_birth}</TableCell>
             <TableCell>{member.aka}</TableCell>
             <TableCell>{member.role}</TableCell>
-            <TableCell>{member.email}</TableCell>
             <TableCell>{member.team_id}</TableCell>
             <TableCell>
               <IconButton onClick={() => onEdit(member)}>

@@ -47,12 +47,14 @@ DROP TABLE IF EXISTS `image_table`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `image_table` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
+  `img_name` varchar(255) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
   `tableId` int DEFAULT NULL,
+  `tableName` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `tableId_UNIQUE` (`tableId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `tableId_UNIQUE` (`tableId`),
+  UNIQUE KEY `tableName_UNIQUE` (`tableName`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,6 +63,7 @@ CREATE TABLE `image_table` (
 
 LOCK TABLES `image_table` WRITE;
 /*!40000 ALTER TABLE `image_table` DISABLE KEYS */;
+INSERT INTO `image_table` VALUES (1,'image-1693208064989.jpg','http://localhost:4000/image/image-1693208064989.jpg',2,'member'),(2,'image-1693210758342.jpg','http://localhost:4000/image/image-1693210758342.jpg',3,'tournament');
 /*!40000 ALTER TABLE `image_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -165,7 +168,6 @@ CREATE TABLE `register` (
 
 LOCK TABLES `register` WRITE;
 /*!40000 ALTER TABLE `register` DISABLE KEYS */;
-INSERT INTO `register` VALUES (1,1,3,'2023-08-24 16:14:22',NULL,'Competing',1,'Quarter-finals'),(2,2,3,'2023-08-24 16:14:22',NULL,'Competing',2,'Pre-Quarterfinals'),(3,3,3,'2023-08-24 16:14:22',NULL,'Competing',5,'Pre-Quarterfinals'),(4,4,3,'2023-08-24 16:14:22',NULL,'Competing',4,'Pre-Quarterfinals'),(5,5,3,'2023-08-24 16:14:22',NULL,'Competing',3,'Pre-Quarterfinals'),(6,6,3,'2023-08-24 16:14:22',NULL,'Competing',7,'Pre-Quarterfinals'),(7,7,3,'2023-08-24 16:14:22',NULL,'Competing',6,'Pre-Quarterfinals'),(8,8,3,'2023-08-24 16:14:22',NULL,'Competing',8,'Pre-Quarterfinals'),(9,9,3,'2023-08-24 16:14:22',NULL,'Competing',10,'Pre-Quarterfinals'),(10,10,3,'2023-08-24 16:14:22',NULL,'Competing',9,'Pre-Quarterfinals'),(11,11,3,'2023-08-24 16:14:22',NULL,'Competing',12,'Pre-Quarterfinals'),(12,12,3,'2023-08-24 16:14:22',NULL,'Competing',13,'Pre-Quarterfinals'),(13,13,3,'2023-08-24 16:14:22',NULL,'Competing',11,'Pre-Quarterfinals'),(14,14,3,'2023-08-24 16:14:22',NULL,'Competing',14,'Pre-Quarterfinals'),(15,15,3,'2023-08-24 16:14:22',NULL,'Competing',15,'Pre-Quarterfinals'),(16,16,3,'2023-08-24 16:14:22',NULL,'Eliminated',16,'Pre-Quarterfinals');
 /*!40000 ALTER TABLE `register` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -179,7 +181,7 @@ DROP TABLE IF EXISTS `schedule`;
 CREATE TABLE `schedule` (
   `schedule_id` int NOT NULL AUTO_INCREMENT,
   `schedule_name` varchar(50) NOT NULL,
-  `round` enum('Quarter Finals','Semi Finals','Finals') NOT NULL,
+  `round` enum('Pre-Quarterfinals','Quarter Finals','Semi Finals','Finals') NOT NULL,
   `date_time` datetime NOT NULL,
   `location` varchar(100) DEFAULT NULL,
   `register_id` int NOT NULL,
@@ -258,7 +260,6 @@ CREATE TABLE `tournament` (
 
 LOCK TABLES `tournament` WRITE;
 /*!40000 ALTER TABLE `tournament` DISABLE KEYS */;
-INSERT INTO `tournament` VALUES (3,'Test123s','Rwadasd56156841864961','2023-08-18','2023-08-28',5,'Single Elimination','Somewhere','2023-08-27 07:34:04','2023-08-21 06:04:13','Online','rov','Ongoing','2023-08-28'),(4,'Test123ss','Rwadasd56156841864961','2023-08-18','2023-08-28',5,'Single Elimination','Somewhere','2023-08-23 11:21:25','2023-08-21 06:04:13','Online','rov','Pending','2023-08-28'),(5,'Test123sss','Rwadasd56156841864961','2023-08-18','2023-08-28',5,'Single Elimination','Somewhere','2023-08-23 11:21:25','2023-08-21 06:04:13','Online','rov','Pending','2023-08-28'),(6,'Test123ssss','Rwadasd56156841864961','2023-08-18','2023-08-28',5,'Single Elimination','Somewhere','2023-08-23 11:21:25','2023-08-21 06:04:13','Online','rov','Pending','2023-08-28'),(7,'Test123asd','Rwadasd56156841864961','2023-08-18','2023-08-28',5,'Single Elimination','Somewhere','2023-08-23 11:21:25','2023-08-21 06:04:13','Online','rov','Pending','2023-08-28');
 /*!40000 ALTER TABLE `tournament` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -271,4 +272,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-27 17:39:53
+-- Dump completed on 2023-08-28 16:25:33

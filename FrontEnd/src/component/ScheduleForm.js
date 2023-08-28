@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-} from "@mui/material";
+import { TextField, Button } from "@mui/material";
 
 function ScheduleForm({ onSubmit, initialData }) {
   const [formData, setFormData] = useState(
@@ -75,20 +72,57 @@ function ScheduleForm({ onSubmit, initialData }) {
         onChange={handleChange}
         required
       />
-      <Button
-        sx={{
-          mt: 3,
-          mb: 2,
-          fontWeight: 600,
-          backgroundColor: "#FF8C00",
-          "&:hover": {
-            bgcolor: "#B22222",
-          },
+      <div
+        style={{
+          padding: "25px",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          gap: "10px",
         }}
-        type="submit"
       >
-        Submit
-      </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{
+            mt: 3,
+            mb: 2,
+            fontWeight: 600,
+            backgroundColor: "#FF8C00",
+            "&:hover": {
+              bgcolor: "#B22222",
+            },
+          }}
+        >
+          Submit
+        </Button>
+        <Button
+          type="button"
+          variant="contained"
+          color="secondary"
+          sx={{
+            mt: 3,
+            mb: 2,
+            fontWeight: 600,
+            backgroundColor: "#551A1A",
+            "&:hover": {
+              bgcolor: "#B22222",
+            },
+          }}
+          onClick={() => {
+            setFormData({
+              schedule_name: "",
+              round: "",
+              date_time: "",
+              location: "",
+              register_id: "",
+            });
+          }}
+        >
+          Clear
+        </Button>
+      </div>
     </form>
   );
 }

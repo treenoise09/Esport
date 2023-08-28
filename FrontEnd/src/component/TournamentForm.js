@@ -9,6 +9,7 @@ import {
   InputLabel,
   Radio,
   RadioGroup,
+  Box,
   FormControlLabel,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -49,13 +50,17 @@ function TournamentForm({ onSubmit, initialData }) {
     }
   );
   const [errors, setErrors] = useState({}); // State to hold validation errors
-
+  const [imageFile, setImageFile] = useState(null); // State to hold the uploaded image file
+  const [isNewImg, setIsNewImg] = useState(false);
   const validateForm = () => {
     let tempErrors = {};
 
     if (tournament.tour_name.length < 3) {
       tempErrors.tour_name =
         "Tournament name must be at least 3 characters long";
+    }
+    if (!imageFile) {
+      tempErrors["image"] = "Please upload a valid Image";
     }
 
     if (tournament.tour_detail.length < 10) {
@@ -70,10 +75,6 @@ function TournamentForm({ onSubmit, initialData }) {
     if (!tournament.end_date) {
       tempErrors.end_date = "End date is required";
     }
-    if (!tournament.team_number || tournament.team_number <= 1) {
-      tempErrors.team_number = "Number of teams should be greater than 1";
-    }
-
     if (!tournament.win_condition) {
       tempErrors.win_condition = "Please select a win condition";
     }
@@ -96,7 +97,7 @@ function TournamentForm({ onSubmit, initialData }) {
     e.preventDefault();
     if (validateForm()) {
       try {
-        onSubmit(tournament);
+        onSubmit(tournament, imageFile);
 
         // Handle success, maybe redirect or show a success message
       } catch (error) {
@@ -106,9 +107,48 @@ function TournamentForm({ onSubmit, initialData }) {
     }
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
+    setIsNewImg(true);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              backgroundColor: "#636574",
+              borderRadius: "10px",
+              padding: "10px",
+            }}
+          >
+            <InputLabel style={{ color: "#999aa3" }}>
+              Tournament Logo
+            </InputLabel>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              style={{ marginBottom: "10px" }}
+            />
+            <img
+              src={
+                isNewImg
+                  ? URL.createObjectURL(imageFile)
+                  : tournament.image ||
+                    (imageFile ? URL.createObjectURL(imageFile) : "")
+              }
+              alt="Preview"
+              width={100}
+              height={100}
+            />
+          </Box>
+        </Grid>
         <Grid item xs={12}>
           <TextField
             fullWidth
@@ -220,28 +260,7 @@ function TournamentForm({ onSubmit, initialData }) {
             FormHelperTextProps={{ style: styles.helper }}
           />
         </Grid>
-        <Grid item xs={6}>
-          <TextField
-            fullWidth
-            label="Number of Teams"
-            type="number"
-            variant="outlined"
-            name="team_number"
-            value={tournament.team_number}
-            error={!!errors.team_number}
-            helperText={errors.team_number}
-            onChange={handleChange}
-            sx={{
-              backgroundColor: "#636574",
-              borderRadius: "10px",
-            }}
-            InputLabelProps={{
-              style: { color: "#999aa3" },
-            }}
-            required
-          />
-        </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <FormControl
             error={!!errors.win_condition}
             fullWidth
@@ -288,7 +307,7 @@ function TournamentForm({ onSubmit, initialData }) {
             required
           />
           <Grid item xs={12}>
-            <FormControl fullWidth variant="outlined"  margin='normal' required>
+            <FormControl fullWidth variant="outlined" margin="normal" required>
               <InputLabel id="game-name-label" style={{ color: "#999aa3" }}>
                 Game Name
               </InputLabel>
@@ -353,7 +372,7 @@ function TournamentForm({ onSubmit, initialData }) {
             </RadioGroup>
           </FormControl>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} container justifyContent="flex-end" gap={'10px'}>
           <Button
             variant="contained"
             sx={{
@@ -368,6 +387,35 @@ function TournamentForm({ onSubmit, initialData }) {
             type="submit"
           >
             Submit
+          </Button>
+          <Button
+            type="button"
+            variant="contained"
+            color="secondary"
+            sx={{
+              mt: 3,
+              mb: 2,
+              fontWeight: 600,
+              backgroundColor: "#551A1A",
+              "&:hover": {
+                bgcolor: "#B22222",
+              },
+            }}
+            onClick={() => {
+              setTournament({
+                tour_name: "",
+                tour_detail: "",
+                start_date: "",
+                end_date: "",
+                team_number: "",
+                win_condition: "",
+                location: "",
+                type: "Online",
+                game_name: "",
+              });
+            }}
+          >
+            Clear
           </Button>
         </Grid>
       </Grid>

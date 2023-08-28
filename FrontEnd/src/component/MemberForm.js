@@ -119,8 +119,9 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
       <div style={{ 
   padding: '25px', 
   display: 'flex', 
-  flexDirection: 'column', 
-  alignItems: 'flex-end'  // Align items to the end (right)
+  flexDirection: 'row', 
+  justifyContent:'flex-end',
+  gap:'10px'
 }}>
       <Button
         type="submit"
@@ -137,6 +138,33 @@ function MemberForm({ onSubmit, initialData, isAdmin }) {
         }}
       >
         Submit
+      </Button>
+      <Button
+        type="button"
+        variant="contained"
+        color="secondary"
+        sx={{
+          mt: 3,
+          mb: 2,
+          fontWeight: 600,
+          backgroundColor: "#551A1A",
+          "&:hover": {
+            bgcolor: "#B22222",
+          },
+        }}
+        onClick={() => {
+          setFormData({
+            username: "",
+            name: "",
+            date_of_birth: "",
+            aka: "",
+            role: "",
+            email: "",
+            team_id: 0,
+          })
+        }}
+      >
+        Clear
       </Button>
       </div>
     </form>

@@ -11,16 +11,10 @@ function MemberAdmin() {
   useEffect(() => {
     fetchMembers();
   }, []);
-  function extractDateForInput(dateString) {
-    return dateString.split('T')[0]; // This will give you the YYYY-MM-DD format
-  }
   const fetchMembers = async () => {
     try {
       const response = await MemberAPI.getAllMembers();
-      setMembers(response.data.map(data => {
-        data.date_of_birth = extractDateForInput(data.date_of_birth)
-        return data
-      }));
+      setMembers(response.data);
     } catch (error) {
       console.error("Failed to fetch members:", error);
     }

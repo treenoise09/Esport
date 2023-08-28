@@ -87,7 +87,7 @@ const RegistrationPage = () => {
   return (
     <Container sx={{padding:'10px'}}>
       <h1>Registration Management</h1>
-{tournament?.status ==="Pending" ?     <Button variant="contained" color="primary" sx={{margin:'5px'}} onClick={() => startTournament()}>
+{tournament?.status ==="Pending" ?     <Button variant="contained" disabled={registrations.length !== 16} color="primary" sx={{margin:'5px'}} onClick={() => startTournament()}>
         Start Tournament
       </Button> : <></>}
       <TableContainer component={Paper} sx={{ maxHeight: 400, overflow: 'auto' }}>

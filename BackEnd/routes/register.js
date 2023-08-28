@@ -96,10 +96,11 @@ router.get("/", async (req, res) => {
     let registrations;
     if(tour_id){
       registrations = await conn.query(`
-      SELECT Register.*, Team.team_name
-      FROM Register 
-      JOIN Team ON Register.team_id = Team.team_id 
-      WHERE Register.tour_id = ?
+      SELECT Register.*, Team.team_name, Schedule.date_time, Schedule.location
+      FROM Register
+      JOIN Team ON Register.team_id = Team.team_id
+      LEFT JOIN Schedule ON Register.register_id = Schedule.register_id
+      WHERE Register.tour_id = ?;
     `, [tour_id]);
     }else{
       registrations = await conn.query("SELECT * FROM Register");

@@ -108,6 +108,24 @@ export default function TournamentDetails() {
               <Box>
                 <TournamentDetail setTournamentData={setTournamentData} />
               </Box>
+              <Box>
+              <Button
+                  fullWidth
+                  variant="contained"
+                  href={`/member/Schedule/${id}?name=${tournamentData.data.tour_name}`}
+                  sx={{
+                    mt: 3, mb: 2,
+                    fontWeight: 600,
+                    backgroundImage: 'linear-gradient(to right, #224db0, #3f3732)',
+                    '&:hover': {
+                      // Adjust the hover gradient or other styles if needed
+                      backgroundImage: 'linear-gradient(to right, #1e439a, #332d29)'
+                    },
+                  }}
+                >
+                  Schedule
+                </Button>
+              </Box>
               <Box
                 component="form"
                 noValidate

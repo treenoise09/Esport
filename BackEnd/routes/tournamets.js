@@ -88,7 +88,7 @@ router.get('/', async (req, res) => {
     const conn = await pool.getConnection();
     try {
 
-        const tournaments = await conn.query("SELECT * FROM Tournament LEFT JOIN image_table ON Tournament.tour_id = image_table.tableId");
+        const tournaments = await conn.query("SELECT * FROM Tournament LEFT JOIN image_table ON Tournament.tour_id = image_table.tableId AND image_table.tableName = 'tournament'");
         res.json({data:tournaments});
     } catch (error) {
         console.error(error);
@@ -132,7 +132,7 @@ router.get('/:id', async (req, res) => {
     const conn = await pool.getConnection();
     try {
 
-        const tournament = await conn.query("SELECT * FROM Tournament LEFT JOIN image_table ON Tournament.tour_id = image_table.tableId WHERE Tournament.tour_id = ?", [req.params.id]);
+        const tournament = await conn.query("SELECT * FROM Tournament LEFT JOIN image_table ON Tournament.tour_id = image_table.tableId  AND image_table.tableName = 'tournament' WHERE Tournament.tour_id = ?", [req.params.id]);
         if (tournament.length > 0) {
             res.json({data:tournament[0]});
         } else {

@@ -38,7 +38,6 @@ const useStyles = makeStyles({
     margin: "20px",
     borderRadius: "10px",
     backgroundImage: "linear-gradient(45deg, #4a1a1c, #0f1849)",
-    zIndex:"-1"
   },
 });
 

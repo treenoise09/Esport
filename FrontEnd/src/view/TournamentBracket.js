@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
-import { Grid, Paper, Typography, Box } from "@mui/material";
+import { Grid, Paper, Typography, Box, Tooltip } from "@mui/material";
 const useStyles = makeStyles({
   teamItem: {
     backgroundColor: "#fff",
@@ -102,42 +102,47 @@ function Match({
   finalHorizontalBracket = false,
   startHorizontalBracket = false, // Add this new prop
   winner,
+  matchInfo,
 }) {
   const classes = useStyles();
   return (
-    <Box my={2} position="relative">
-      {showConnectLine && (
-        <Box position="absolute" className="someClassForVerticalLines" />
-      )}
-      {showQuaterLine && (
-        <Box
-          position="absolute"
-          style={{
-            content: '""',
-            position: "absolute",
-            borderRight: "2px solid #fff",
-            height: "calc(100% + 108px)", // Adjust the height to span between matches.
-            right: "-40px",
-            zIndex: "-1",
-            top: "50%",
-          }}
-        />
-      )}
-      {startHorizontalBracket && <Box position="absolute" style={{}} />}
-      {finalHorizontalBracket && (
-        <Box
-          position="absolute"
-          style={{
-            height: "442px",
-            borderLeft: "2px solid #fff",
-            top: "-169px",
-            left: "-20px",
-          }}
-        />
-      )}
+    <Tooltip
+      title={`Start Time: ${matchInfo.startTime || 'N/A'}, Location: ${matchInfo.location || 'N/A'}`}
+      arrow
+    >
+      <Box my={2} position="relative" >
+        {showConnectLine && (
+          <Box position="absolute" className="someClassForVerticalLines" />
+        )}
+        {showQuaterLine && (
+          <Box
+            position="absolute"
+            style={{
+              content: '""',
+              position: "absolute",
+              borderRight: "2px solid #fff",
+              height: "calc(100% + 108px)", // Adjust the height to span between matches.
+              right: "-40px",
+              zIndex: "-1",
+              top: "50%",
+            }}
+          />
+        )}
+        {startHorizontalBracket && <Box position="absolute" style={{}} />}
+        {finalHorizontalBracket && (
+          <Box
+            position="absolute"
+            style={{
+              height: "442px",
+              borderLeft: "2px solid #fff",
+              top: "-169px",
+              left: "-20px",
+            }}
+          />
+        )}
 
-      <Box
-        className={`
+        <Box
+          className={`
             ${showHorizontalBracket ? classes.horizontalBracket : ""}
             ${showConnectLine ? classes.matchConnectLine : ""}
             ${showQuaterLine ? classes.QuaterLine : ""}
@@ -145,29 +150,31 @@ function Match({
             ${finalHorizontalBracket ? classes.finalHorizontalBracket : ""}
             ${startHorizontalBracket ? classes.startHorizontalBracket : ""}  
           `}
-      >
-        <Paper
-          elevation={3}
-          className={classes.teamItem}
-          style={{
-            backgroundColor: team1 === winner ? "#4CAF50" : "#515257",
-            color: "#fff",
-          }}
+          
         >
-          <Typography>{team1}</Typography>
-        </Paper>
-        <Paper
-          elevation={3}
-          className={classes.teamItem}
-          style={{
-            backgroundColor: team2 === winner ? "#4CAF50" : "#515257",
-            color: "#fff",
-          }}
-        >
-          <Typography>{team2}</Typography>
-        </Paper>
+          <Paper
+            elevation={3}
+            className={classes.teamItem}
+            style={{
+              backgroundColor: team1 === winner ? "#4CAF50" : "#515257",
+              color: "#fff",
+            }}
+          >
+            <Typography>{team1}</Typography>
+          </Paper>
+          <Paper
+            elevation={3}
+            className={classes.teamItem}
+            style={{
+              backgroundColor: team2 === winner ? "#4CAF50" : "#515257",
+              color: "#fff",
+            }}
+          >
+            <Typography>{team2}</Typography>
+          </Paper>
+        </Box>
       </Box>
-    </Box>
+    </Tooltip>
   );
 }
 
@@ -222,6 +229,10 @@ function TournamentBracket({ teams }) {
           .map((_, idx) => (
             <Match
               key={idx}
+              matchInfo={{
+                startTime: preQuarterTeams[idx]?.date_time,
+                location: preQuarterTeams[idx]?.location,
+              }}
               team1={
                 preQuarterTeams[idx] ? preQuarterTeams[idx].team_name : "TBD"
               }
@@ -259,6 +270,10 @@ function TournamentBracket({ teams }) {
         >
           <Match
             key={0}
+            matchInfo={{
+              startTime: quarterTeams[0]?.date_time,
+              location: quarterTeams[0]?.location,
+            }}
             team1={quarterTeams[0] ? quarterTeams[0].team_name : "TBD"}
             team2={quarterTeams[7] ? quarterTeams[7].team_name : "TBD"}
             showHorizontalBracket
@@ -279,6 +294,10 @@ function TournamentBracket({ teams }) {
           <BlankSpace />
           <Match
             key={1}
+            matchInfo={{
+              startTime: quarterTeams[1]?.date_time,
+              location: quarterTeams[1]?.location,
+            }}
             team1={quarterTeams[1] ? quarterTeams[1].team_name : "TBD"}
             team2={quarterTeams[6] ? quarterTeams[6].team_name : "TBD"}
             showHorizontalBracket
@@ -298,6 +317,10 @@ function TournamentBracket({ teams }) {
           <BlankSpace />
           <Match
             key={2}
+            matchInfo={{
+              startTime: quarterTeams[2]?.date_time,
+              location: quarterTeams[2]?.location,
+            }}
             team1={quarterTeams[2] ? quarterTeams[2].team_name : "TBD"}
             team2={quarterTeams[4] ? quarterTeams[4].team_name : "TBD"}
             showHorizontalBracket
@@ -318,6 +341,10 @@ function TournamentBracket({ teams }) {
           <BlankSpace />
           <Match
             key={3}
+            matchInfo={{
+              startTime: quarterTeams[3]?.date_time,
+              location: quarterTeams[3]?.location,
+            }}
             team1={quarterTeams[3] ? quarterTeams[3].team_name : "TBD"}
             team2={quarterTeams[5] ? quarterTeams[5].team_name : "TBD"}
             showHorizontalBracket
@@ -346,6 +373,10 @@ function TournamentBracket({ teams }) {
           height="100%"
         >
           <Match
+            matchInfo={{
+              startTime: semiTeams[0]?.date_time,
+              location: semiTeams[0]?.location,
+            }}
             team1={semiTeams[0] ? semiTeams[0].team_name : "TBD"}
             team2={semiTeams[3] ? semiTeams[3].team_name : "TBD"}
             showHorizontalBracket
@@ -363,6 +394,10 @@ function TournamentBracket({ teams }) {
           <BlankSpace />
           <BlankSpace />
           <Match
+            matchInfo={{
+              startTime: semiTeams[1]?.date_time,
+              location: semiTeams[1]?.location,
+            }}
             team1={semiTeams[1] ? semiTeams[1].team_name : "TBD"}
             team2={semiTeams[2] ? semiTeams[2].team_name : "TBD"}
             showHorizontalBracket
@@ -374,7 +409,6 @@ function TournamentBracket({ teams }) {
                 ? semiTeams[2].team_name
                 : "N/A"
             }
-            
           />
         </Box>
       </Grid>
@@ -388,6 +422,10 @@ function TournamentBracket({ teams }) {
           height="100%"
         >
           <Match
+            matchInfo={{
+              startTime: finalTeams[1]?.date_time,
+              location: finalTeams[1]?.location,
+            }}
             team1={finalTeams[0] ? finalTeams[0].team_name : "TBD"}
             team2={finalTeams[1] ? finalTeams[1].team_name : "TBD"}
             winner={

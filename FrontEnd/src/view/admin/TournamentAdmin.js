@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import TournamentAPI from "../../apis/tournamentAPI";
 import TournamentForm from "../../component/TournamentForm";
 import TournamentList from "../../component/TournamentList";
+import uploadImage from "../../apis/commonAPI";
 
 
 function extractDateForInput(dateString) {
@@ -31,12 +32,13 @@ function TournamentAdmin() {
     }
   };
 
-  const handleFormSubmit = async (formData) => {
+  const handleFormSubmit = async (formData,image) => {
     if (selectedTournament) {
       try {
         await TournamentAPI.updateTournament(selectedTournament.tour_id, formData);
         fetchTournaments();
         setSelectedTournament(null);
+        await uploadImage(selectedTournament.tour_id,image)
       } catch (error) {
         console.error("Failed to update tournament:", error);
       }
@@ -44,6 +46,7 @@ function TournamentAdmin() {
       try {
         await TournamentAPI.createTournament(formData);
         fetchTournaments();
+        await uploadImage(selectedTournament.tour_id,image)
       } catch (error) {
         console.error("Failed to create tournament:", error);
       }
@@ -58,6 +61,7 @@ function TournamentAdmin() {
       console.error("Failed to delete tournament:", error);
     }
   };
+
 
   return (
     <div style={{padding:'10px'}}>

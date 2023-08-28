@@ -51,7 +51,7 @@ export default function Home() {
                   component="img"
                   height="140"
                   // image={tournament.game_name || photo}
-                  image={photo}
+                  image={tournament.image ||photo}
                   alt={tournament.tour_name}
                 />
                 <CardContent sx={{opacity:'1.0'}}>

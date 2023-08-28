@@ -76,6 +76,7 @@ function TournamentAdmin() {
           title: 'Failure',
           description: 'failed to createTournament.',
         });
+        console.log(error)
       } finally {
         setIsModalOpen(true);
       }

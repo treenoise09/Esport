@@ -68,6 +68,7 @@ router.post("/", tournamentValidation, async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   const conn = await pool.getConnection();
+  
   try {
     const response = await conn.query(
       "INSERT INTO Tournament (tour_name, tour_detail, start_date, end_date, win_condition, location, type, game_name,regis_end) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)",

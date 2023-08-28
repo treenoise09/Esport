@@ -5,9 +5,11 @@ const BASE_URL = 'http://localhost:4000'; // Replace with your backend URL
 const tournamentAPI = {
   // Create a new tournament
   createTournament: async (data) => {
+    
     try {
       const response = await axios.post(`${BASE_URL}/tournaments`, data);
-      return response.data;
+      const jason = JSON.parse(response);
+      return jason.data;
     } catch (error) {
       console.error('Error creating tournament:', error);
       throw error;

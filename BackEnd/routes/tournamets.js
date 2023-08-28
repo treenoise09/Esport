@@ -69,7 +69,7 @@ router.post("/", tournamentValidation, async (req, res) => {
   }
   const conn = await pool.getConnection();
   try {
-    await conn.query(
+    const res = await conn.query(
       "INSERT INTO Tournament (tour_name, tour_detail, start_date, end_date, win_condition, location, type, game_name,regis_end) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)",
       [
         req.body.tour_name,
@@ -83,7 +83,7 @@ router.post("/", tournamentValidation, async (req, res) => {
         req.body.regis_end,
       ]
     );
-    res.status(201).send({ message: "Tournament created successfully!" });
+    res.status(201).send({ message: "Tournament created successfully!" ,data:res});
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Server error" });

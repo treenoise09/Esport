@@ -78,14 +78,15 @@ const RegistrationPage = () => {
   };
   const startTournament = async () => {
     console.log("Start")
-    const positions = Array.from({ length: 16 }, (_, i) => i + 1);
-    const shuffledPositions = positions.sort(() => Math.random() - 0.5);
+    const positions = [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]
+    const regis_index = [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1]
 
     try {
       const updatedRegistrations = registrations.map((registration,index) => ({
         ...registration,
         status: "Competing",
-        position: shuffledPositions[index]
+        position: positions[index],
+        index:regis_index[index]
       }));
 
       // Assuming you have an API function to bulk update registrations

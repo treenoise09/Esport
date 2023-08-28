@@ -187,8 +187,8 @@ c80 80 147 145 150 145 3 0 320 -315 705 -700z m3005 555 l145 -145 -703 -703
                     {/* Details for CalendarMonthIcon */}
 
                     <div style={{ color: "#FF8C00" }}>
-                      - รับสมัคร : {tournamentDetails.data.start_date} -{" "}
-                      {tournamentDetails.data.regis_end}
+                      - รับสมัคร : {extractDateForInput(tournamentDetails.data.start_date)} -{" "}
+                      {extractDateForInput(tournamentDetails.data.regis_end)}
                     </div>
                   </Grid>
 

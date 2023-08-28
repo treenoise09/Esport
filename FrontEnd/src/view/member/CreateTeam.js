@@ -13,11 +13,17 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import teamAPI from "../../apis/teamAPI";
 import { useNavigate } from "react-router-dom";
+import NotificationModal from "../../component/NotificationModal";
 
 const Team = () => {
   const [team, setTeam] = useState({
     team_name: "",
     members: [""],
+  });
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [notification, setNotification] = React.useState({
+    title: '',
+    description: '',
   });
   const navigate = useNavigate()
   const isTeamValid = team.members.length >= 6;
@@ -44,14 +50,24 @@ const Team = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     teamAPI
-      .createTeam(team)
-      .then((response) => {
-        navigate("/member/tournament")
-        console.log("Team created:", response);
-      })
-      .catch((error) => {
-        console.error("Error creating team:", error);
-      });
+  .createTeam(team)
+  .then((response) => {
+    navigate("/member/tournament");
+    console.log("Team created:", response);
+    setNotification({
+      title: 'Success',
+      description: 'Successfully created the team.',
+    });
+  })
+  .catch((error) => {
+    setNotification({
+      title: 'Failure',
+      description: 'Could not create the team.',
+    });
+  })
+  .finally(() => {
+    setIsModalOpen(true);
+  });
   };
 
   return (
@@ -142,6 +158,12 @@ const Team = () => {
           </Grid>
         </form>
       </Box>
+      <NotificationModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={notification.title}
+        description={notification.description}
+      />
     </Container>
   );
 };

@@ -3,7 +3,7 @@ import TournamentAPI from "../../apis/tournamentAPI";
 import TournamentForm from "../../component/TournamentForm";
 import TournamentList from "../../component/TournamentList";
 import uploadImage from "../../apis/commonAPI";
-
+import NotificationModal from "../../component/NotificationModal";
 function extractDateForInput(dateString) {
   return dateString.split("T")[0]; // This will give you the YYYY-MM-DD format
 }
@@ -11,6 +11,11 @@ function extractDateForInput(dateString) {
 function TournamentAdmin() {
   const [tournaments, setTournaments] = useState([]);
   const [selectedTournament, setSelectedTournament] = useState(null);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [notification, setNotification] = React.useState({
+    title: '',
+    description: '',
+  });
 
   useEffect(() => {
     fetchTournaments();
@@ -43,26 +48,53 @@ function TournamentAdmin() {
         fetchTournaments();
         setSelectedTournament(null);
         await uploadImage(selectedTournament.tour_id, image, "tournament");
+        setNotification({
+          title: 'Success',
+          description: 'Successfully updateTournament.',
+        });
       } catch (error) {
-        console.error("Failed to update tournament:", error);
+        setNotification({
+          title: 'Failure',
+          description: 'failed to updateTournament.',
+        });
+      } finally {
+        setIsModalOpen(true);
       }
     } else {
       try {
         await TournamentAPI.createTournament(formData);
         fetchTournaments();
         await uploadImage(selectedTournament.tour_id, image, "tournament");
+        setNotification({
+          title: 'Success',
+          description: 'Successfully createTournament.',
+        });
       } catch (error) {
-        console.error("Failed to create tournament:", error);
+        setNotification({
+          title: 'Failure',
+          description: 'failed to createTournament.',
+        });
+      } finally {
+        setIsModalOpen(true);
       }
-    }
+    };
   };
 
   const handleDelete = async (tournamentId) => {
     try {
       await TournamentAPI.deleteTournament(tournamentId);
       fetchTournaments();
+      setNotification({
+        title: 'Success',
+        description: 'Successfully deleteTournament.',
+      });
     } catch (error) {
-      console.error("Failed to delete tournament:", error);
+      setNotification({
+        title: 'Failure',
+        description: 'failed to deleteTournament.',
+      });
+    } finally {
+      setIsModalOpen(true);
     }
   };
 
@@ -78,6 +110,12 @@ function TournamentAdmin() {
         tournaments={tournaments}
         onDelete={handleDelete}
         onEdit={setSelectedTournament}
+      />
+      <NotificationModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={notification.title}
+        description={notification.description}
       />
     </div>
   );

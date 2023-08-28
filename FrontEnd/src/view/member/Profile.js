@@ -17,13 +17,18 @@ import MemberForm from "../../component/MemberForm";
 import MemberAPI from "../../apis/memberAPI";
 import uploadImage from "../../apis/commonAPI";
 import defaultAvatar from "../../photo/User-avatar.svg.png";
+import NotificationModal from "../../component/NotificationModal";
 
 export default function Profile() {
   const [members, setMembers] = useState({});
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
   const { id } = useParams();
-
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [notification, setNotification] = React.useState({
+    title: '',
+    description: '',
+  });
   useEffect(() => {
     fetchMember();
   }, []);
@@ -41,8 +46,12 @@ export default function Profile() {
     try {
       await MemberAPI.updateMember(members.member_id, formData);
       fetchMember();
+      setNotification({title: 'Success',
+      description: 'Successfully change profile.',})
     } catch (error) {
       console.error("Failed to update member:", error);
+      setNotification({title: 'Failure',
+      description: 'Fail to change profile.',})
     }
   };
 
@@ -92,6 +101,12 @@ export default function Profile() {
           </Button>
         </DialogActions>
       </Dialog>
+      <NotificationModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={notification.title}
+        description={notification.description}
+      />
     </Container>
   );
 }

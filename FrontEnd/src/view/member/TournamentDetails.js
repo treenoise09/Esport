@@ -8,13 +8,13 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signup from "../../photo/signup.jpg";
-import Breadcrumbs from "../../component/CustomBreadcrumbs";
 import memberAPI from "../../apis/memberAPI";
 import { useParams } from "react-router-dom";
 import { createRegistration } from "../../apis/registerAPI";
 import TournamentDetail from "../../component/TournamentDetail";
 import tournamentAPI from "../../apis/tournamentAPI";
 import { useUser } from "../../component/UserContext";
+import NotificationModal from "../../component/NotificationModal";
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme({
@@ -30,6 +30,11 @@ const defaultTheme = createTheme({
 });
 
 export default function TournamentDetails() {
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [notification, setNotification] = React.useState({
+    title: '',
+    description: '',
+  });
   const [tournamentData, setTournamentData] = React.useState({
     data: {
       tour_name: "",
@@ -39,9 +44,22 @@ export default function TournamentDetails() {
   const [hasTeam, setHasTeam] = React.useState(0); // Set to true if the user has a team
   const { id } = useParams();
   const { user } = useUser();
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    createRegistration(hasTeam, id);
+    try {
+      await createRegistration(hasTeam, id); // Assuming this returns a promise
+      setNotification({
+        title: 'Success',
+        description: 'Successfully registered for the tournament.',
+      });
+    } catch (error) {
+      setNotification({
+        title: 'Failure',
+        description: 'You are already registered for this tournament.',
+      });
+    } finally {
+      setIsModalOpen(true);
+    }
   };
   const fecthHasTeam = async () => {
     const res = await memberAPI.getMemberById(user.memberId);
@@ -85,7 +103,7 @@ export default function TournamentDetails() {
               }}
             >
               <img
-                src={signup}
+                src={tournamentData.data.image||signup}
                 alt="description"
                 style={{
                   flex: "1",
@@ -190,6 +208,12 @@ export default function TournamentDetails() {
           </Box>
         </Container>
       </div>
+      <NotificationModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={notification.title}
+        description={notification.description}
+      />
     </ThemeProvider>
   );
 }

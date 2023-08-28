@@ -1,21 +1,17 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signin from "../photo/signin.jpg";
 import memberAPI from "./../apis/memberAPI";
-import Breadcrumbs from "../component/CustomBreadcrumbs";
-import Footer from "../component/Footer";
 import Appbar from "../component/Appbar";
+import NotificationModal from "../component/NotificationModal";
 
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../component/UserContext";
@@ -36,6 +32,11 @@ const defaultTheme = createTheme({
 export default function SignIn() {
   const navigate = useNavigate();
   const { setUser } = useUser();
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [notification, setNotification] = React.useState({
+    title: '',
+    description: '',
+  });
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -71,9 +72,19 @@ export default function SignIn() {
         navigate("/member/Tournament");
       }
       // Navigate to another page or show success message
+      setNotification({
+        title: 'Login Successful',
+        description: 'You have successfully logged in!',
+      });
+      setIsModalOpen(true);
     } catch (error) {
       console.error("Login failed:", error);
       // Show error message
+      setNotification({
+        title: 'Login Failed',
+        description: 'Failed to login. Please try again.',
+      });
+      setIsModalOpen(true);
     }
   };
 
@@ -218,8 +229,13 @@ export default function SignIn() {
             </div>
           </Box>
         </Container>
-        <Footer />
       </div>
+      <NotificationModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={notification.title}
+        description={notification.description}
+      />
     </ThemeProvider>
   );
 }

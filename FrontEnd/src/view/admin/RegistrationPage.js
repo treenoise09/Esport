@@ -20,17 +20,23 @@ import {
 } from "../../apis/registerAPI";
 import { useParams } from "react-router-dom";
 import tournamentAPI from "../../apis/tournamentAPI";
+import NotificationModal from "../../component/NotificationModal";
 const RegistrationPage = () => {
   // Dummy data for demonstration
   const [registrations, setRegistrations] = useState([]);
   const [tournament,setTournament] = useState({});
   const { id } = useParams();
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [notification, setNotification] = React.useState({
+    title: '',
+    description: '',
+  });
 
   const fetchData = async () => {
     try {
       const data = await getAllRegistrationsByTournamentId(id);
       const tourData = await tournamentAPI.getTournamentById(id);
-      setTournament(tourData)
+      setTournament(tourData.data)
       setRegistrations(data.data);
     } catch (error) {
       console.error("Error fetching registrations:", error);
@@ -57,8 +63,17 @@ const RegistrationPage = () => {
         registrations[index]
       );
       fetchData();
+      setNotification({
+        title: 'Success',
+        description: 'Successfully updateRegistration for the tournament.',
+      });
     } catch (error) {
-      console.error(`Error updating registration ${id}:`, error);
+      setNotification({
+        title: 'Failure',
+        description: 'failed to updateRegistration for this tournament.',
+      });
+    } finally {
+      setIsModalOpen(true);
     }
   };
   const startTournament = async () => {
@@ -153,6 +168,12 @@ const RegistrationPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <NotificationModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={notification.title}
+        description={notification.description}
+      />
     </Container>
   );
 };

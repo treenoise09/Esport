@@ -18,6 +18,9 @@ import Footer from "../component/Footer";
 import Appbar from "../component/Appbar";
 import memberAPI from './../apis/memberAPI';
 import { Route } from "react-router-dom";
+import { useState } from "react";
+import NotificationModal from '../component/NotificationModal'; // Import the NotificationModal
+import { useNavigate } from 'react-router-dom';  // For navigation
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -36,6 +39,15 @@ const defaultTheme = createTheme({
 
 
 export default function SignUp() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [notification, setNotification] = useState({ title: '', description: '' });
+  const navigate = useNavigate(); // For navigation
+  const handleClose = () => {
+    setIsModalOpen(false);
+    if (notification.title === "Success") {
+      navigate('/signin'); // Navigate to /signin when modal closes
+    }
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -55,11 +67,14 @@ export default function SignUp() {
     try {
       const result = await memberAPI.registerMember(memberData);
       console.log("Member registered successfully:", result);
-    
-      // Navigate to another page or show success message
+      setNotification({ title: 'Success', description: 'Member registered successfully.' });
+      setIsModalOpen(true);
+      // Rest of your code
     } catch (error) {
       console.error("Registration failed:", error);
-      // Show error message
+      setNotification({ title: 'Error', description: 'Registration failed. Please try again.' });
+      setIsModalOpen(true);
+      // Rest of your code
     }
   };
   
@@ -298,6 +313,12 @@ export default function SignUp() {
         </Container>
         <Footer />
       </div>
+      <NotificationModal
+        open={isModalOpen}
+        onClose={handleClose}
+        title={notification.title}
+        description={notification.description}
+      />
     </ThemeProvider>
   );
 }

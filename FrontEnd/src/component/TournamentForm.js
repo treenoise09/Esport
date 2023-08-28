@@ -261,6 +261,29 @@ function TournamentForm({ onSubmit, initialData }) {
           />
         </Grid>
         <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Register end date"
+            type="date"
+            variant="outlined"
+            name="regis_end"
+            error={Boolean(errors.regis_end)}
+            helperText={errors.regis_end}
+            value={tournament.regis_end}
+            onChange={handleChange}
+            sx={{
+              backgroundColor: "#636574",
+              borderRadius: "10px",
+            }}
+            InputLabelProps={{
+              style: { color: "#999aa3" },
+              shrink: true,
+            }}
+            required
+            FormHelperTextProps={{ style: styles.helper }}
+          />
+        </Grid>
+        <Grid item xs={12}>
           <FormControl
             error={!!errors.win_condition}
             fullWidth

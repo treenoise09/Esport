@@ -106,10 +106,10 @@ function AdminNavBar() {
             }}
           >
             <Link
-              to="/admin/Team/create"
+              to="/admin/Team"
               style={{ textDecoration: "none", color: "white" }}
             >
-              Create Team
+              Team
             </Link>
           </Button>
           <Button

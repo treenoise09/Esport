@@ -50,12 +50,12 @@ function TournamentAdmin() {
         await uploadImage(selectedTournament.tour_id, image, "tournament");
         setNotification({
           title: 'Success',
-          description: 'Successfully updateTournament.',
+          description: 'Successfully update Tournament.',
         });
       } catch (error) {
         setNotification({
           title: 'Failure',
-          description: 'failed to updateTournament.',
+          description: 'failed to update Tournament.',
         });
       } finally {
         setIsModalOpen(true);
@@ -69,12 +69,12 @@ function TournamentAdmin() {
         fetchTournaments();
         setNotification({
           title: 'Success',
-          description: 'Successfully createTournament.',
+          description: 'Successfully create Tournament.',
         });
       } catch (error) {
         setNotification({
           title: 'Failure',
-          description: 'failed to createTournament.',
+          description: 'failed to create Tournament.',
         });
         console.log(error)
       } finally {
@@ -89,12 +89,12 @@ function TournamentAdmin() {
       fetchTournaments();
       setNotification({
         title: 'Success',
-        description: 'Successfully deleteTournament.',
+        description: 'Successfully delete Tournament.',
       });
     } catch (error) {
       setNotification({
         title: 'Failure',
-        description: 'failed to deleteTournament.',
+        description: 'failed to delete Tournament.',
       });
     } finally {
       setIsModalOpen(true);

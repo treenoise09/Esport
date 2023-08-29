@@ -65,12 +65,12 @@ const RegistrationPage = () => {
       fetchData();
       setNotification({
         title: 'Success',
-        description: 'Successfully updateRegistration for the tournament.',
+        description: 'Successfully update Registration for the tournament.',
       });
     } catch (error) {
       setNotification({
         title: 'Failure',
-        description: 'failed to updateRegistration for this tournament.',
+        description: 'failed to update Registration for this tournament.',
       });
     } finally {
       setIsModalOpen(true);

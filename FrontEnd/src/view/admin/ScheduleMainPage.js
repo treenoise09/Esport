@@ -29,14 +29,14 @@ function ScheduleMainPage() {
             await updateSchedule(selectedSchedule.schedule_id, formData);
             setNotification({
                 title: 'Success',
-                description: 'Successfully updateSchedule.',
+                description: 'Successfully update Schedule.',
               });
               setIsModalOpen(true)
             } else {
             await createSchedule(formData);
             setNotification({
                 title: 'Success',
-                description: 'Successfully createSchedule.',
+                description: 'Successfully create Schedule.',
               });
               setIsModalOpen(true)
         }
@@ -52,7 +52,7 @@ function ScheduleMainPage() {
         await deleteSchedule(id);
         setNotification({
             title: 'Success',
-            description: 'Successfully deleteSchedule.',
+            description: 'Successfully delete Schedule.',
           });
           setIsModalOpen(true)
         fetchSchedules();

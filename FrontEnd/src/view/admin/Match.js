@@ -53,12 +53,12 @@ function Match() {
         setSelectedMatch(null);
         setNotification({
           title: 'Success',
-          description: 'Successfully updateMatch for the tournament.',
+          description: 'Successfully update Match for the tournament.',
         });
       } catch (error) {
         setNotification({
           title: 'Failure',
-          description: 'failed to updateMatch for this tournament.',
+          description: 'failed to update Match for this tournament.',
         });
       } finally {
         setIsModalOpen(true);
@@ -70,12 +70,12 @@ function Match() {
         fetchMatches();
         setNotification({
           title: 'Success',
-          description: 'Successfully createMatch for the tournament.',
+          description: 'Successfully create Match for the tournament.',
         });
       } catch (error) {
         setNotification({
           title: 'Failure',
-          description: 'failed to createMatch for this tournament.',
+          description: 'failed to create Match for this tournament.',
         });
       } finally {
         setIsModalOpen(true);

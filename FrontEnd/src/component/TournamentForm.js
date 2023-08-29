@@ -374,7 +374,7 @@ function TournamentForm({ onSubmit, initialData }) {
           <Grid item xs={12}>
             <FormControl fullWidth variant="outlined" margin="normal" required>
               <InputLabel id="game-name-label" style={{ color: "#999aa3" }}>
-                Game Name
+                Status
               </InputLabel>
               <Select
                 labelId="status"

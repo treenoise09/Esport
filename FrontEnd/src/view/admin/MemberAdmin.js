@@ -32,12 +32,12 @@ function MemberAdmin() {
         setSelectedMember(null);
         setNotification({
           title: 'Success',
-          description: 'Successfully updateMember.',
+          description: 'Successfully update Member.',
         });
       } catch (error) {
         setNotification({
           title: 'Failure',
-          description: 'Failed to updateMember.',
+          description: 'Failed to update Member.',
         });
       } finally {
         setIsModalOpen(true);
@@ -49,12 +49,12 @@ function MemberAdmin() {
       await MemberAPI.deleteMember(memberId);
       fetchMembers();setNotification({
         title: 'Success',
-        description: 'Successfully deleteMember.',
+        description: 'Successfully delete Member.',
       });
     } catch (error) {
       setNotification({
         title: 'Failure',
-        description: 'Failed to deleteMember.',
+        description: 'Failed to delete Member.',
       });
     } finally {
       setIsModalOpen(true);

@@ -24,6 +24,7 @@ import AdminNavBar from "./component/AdminNavBar";
 import MemberNavBar from "./component/MemberNavBar";
 import RegistrationPage from "./view/admin/RegistrationPage";
 import TournamentSchedule from "./view/TournamentSchedule";
+import TeamAdmin from "./view/admin/TeamAdmin";
 import Team from "./view/member/CreateTeam";
 
 const useStyles = makeStyles({
@@ -88,6 +89,7 @@ function AdminRoutes() {
           <Route path="Member" element={<MemberAdmin />} />
           <Route path="Shedule" element={<ScheduleMainPage />} />
           <Route path="Tournament/:id" element={<RegistrationPage />} />
+          <Route path="Team" element={<TeamAdmin />} />
         </Routes>
       </Container>
     </div>

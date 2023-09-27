@@ -26,6 +26,7 @@ import RegistrationPage from "./view/admin/RegistrationPage";
 import TournamentSchedule from "./view/TournamentSchedule";
 import TeamAdmin from "./view/admin/TeamAdmin";
 import Team from "./view/member/CreateTeam";
+import TeamProfile from "./view/member/TeamProfile";
 
 const useStyles = makeStyles({
   screenContainer: {
@@ -106,6 +107,7 @@ function MemberRoute() {
           <Route path="/Profile/:id" element={<Profile />} />
           <Route path="/Schedule/:id" element={ <TournamentSchedule/>}/>
           <Route path="/create-team" element={<Team />}/>
+          <Route path="/team/profile/:id" element={<TeamProfile/>}/>
         </Routes>
     </div>
   );

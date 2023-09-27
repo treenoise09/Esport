@@ -95,7 +95,7 @@ function MemberNavBar() {
           <Button
             color="inherit"
             variant="outlined"
-            href={`/Profile/${user.memberId}`} // Assuming the dashboard route for logged-in users
+            href={`/member/Profile/${user.memberId}`}
             sx={{
               bgcolor: "#FF8C00",
               color: "#000000",

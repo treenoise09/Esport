@@ -32,8 +32,8 @@ const defaultTheme = createTheme({
 export default function TournamentDetails() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [notification, setNotification] = React.useState({
-    title: '',
-    description: '',
+    title: "",
+    description: "",
   });
   const [tournamentData, setTournamentData] = React.useState({
     data: {
@@ -49,13 +49,13 @@ export default function TournamentDetails() {
     try {
       await createRegistration(hasTeam, id); // Assuming this returns a promise
       setNotification({
-        title: 'Success',
-        description: 'Successfully registered for the tournament.',
+        title: "Success",
+        description: "Successfully registered for the tournament.",
       });
     } catch (error) {
       setNotification({
-        title: 'Failure',
-        description: 'You are already registered for this tournament.',
+        title: "Failure",
+        description: "You are already registered for this tournament.",
       });
     } finally {
       setIsModalOpen(true);
@@ -103,7 +103,7 @@ export default function TournamentDetails() {
               }}
             >
               <img
-                src={tournamentData.data.image||signup}
+                src={tournamentData.data.image || signup}
                 alt="description"
                 style={{
                   flex: "1",
@@ -155,33 +155,39 @@ export default function TournamentDetails() {
               >
                 {!hasTeam && (
                   <>
-                    <Grid
-                      container
-                      justifyContent="center"
-                      style={{ marginTop: "10px" }}
-                    >
-                      <Grid item>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          href="/member/create-team"
-                          sx={{
-                            mt: 1,
-                            mb: 2,
-                            fontWeight: 600,
-                          }}
-                        >
-                          Create a Team
-                        </Button>
-                      </Grid>
-                    </Grid>
                     <Typography variant="body2" color="error">
                       You can't register for the tournament without a team.
                       Please create a team first.
                     </Typography>
                   </>
                 )}
-                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                {tournamentData.data.status === "End" && (
+                  <>
+                    <Box
+                      sx={{
+                        background: "#ff8f8f", // A soft red background
+                        color: "#800000", // Dark red font color
+                        borderRadius: "5px",
+                        padding: "1rem",
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        fontSize: "1.2rem",
+                        margin: "1rem 0",
+                      }}
+                    >
+                      <Typography variant="body2">
+                        This tournament is completed
+                      </Typography>
+                    </Box>
+                  </>
+                )}
+                <div
+                  style={{
+                    display:
+                      tournamentData.data.status === "End" ? "none" : "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
                   <Button
                     type="submit"
                     fullWidth

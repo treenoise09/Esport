@@ -228,7 +228,7 @@ router.put("/:id", registerValidation, async (req, res) => {
 
   try {
     const result = await conn.query(
-      "UPDATE Register SET team_id = ?, tour_id = ?,status = ?, round = ?,index = ?  WHERE register_id = ?",
+      "UPDATE Register SET team_id = ?, tour_id = ?,status = ?, `round` = ?,`index` = ?  WHERE register_id = ?",
       [
         req.body.team_id,
         req.body.tour_id,
@@ -239,7 +239,10 @@ router.put("/:id", registerValidation, async (req, res) => {
       ]
     );
     if (result.affectedRows > 0) {
-      res.send({ message: "Registration updated successfully!" });
+      if (req.body.status === 'Winner'){
+        await conn.query("UPDATE Tournament SET status = 'END' WHERE tour_id = ?",[req.body.tour_id])
+        res.send({ message: "Registration updated successfully!" });
+      }
     } else {
       res.status(404).send({ message: "Registration not found" });
     }

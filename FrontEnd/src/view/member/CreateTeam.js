@@ -10,15 +10,21 @@ import {
 } from "@mui/material";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-
+import { useLocation } from "react-router-dom";
 import teamAPI from "../../apis/teamAPI";
 import { useNavigate } from "react-router-dom";
 import NotificationModal from "../../component/NotificationModal";
+function useQuery() {
+  const { search } = useLocation();
 
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
 const Team = () => {
+  const query = useQuery()
   const [team, setTeam] = useState({
     team_name: "",
-    members: [""],
+    members: [query.get('teamLead'),"","","","",""],
+    team_lead:query.get('id')
   });
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [notification, setNotification] = React.useState({
@@ -52,12 +58,13 @@ const Team = () => {
     teamAPI
   .createTeam(team)
   .then((response) => {
-    navigate("/member/tournament");
     console.log("Team created:", response);
     setNotification({
       title: 'Success',
       description: 'Successfully created the team.',
+
     });
+    navigate("/member/tournament");
   })
   .catch((error) => {
     setNotification({
@@ -67,6 +74,7 @@ const Team = () => {
   })
   .finally(() => {
     setIsModalOpen(true);
+    
   });
   };
 
@@ -106,11 +114,12 @@ const Team = () => {
               <Grid item xs={12} key={index}>
                 <TextField
                   fullWidth
-                  label={`Member ${index + 1}`}
+                  label={index === 0 ?"Team Lead" :`Member ${index + 1}`}
                   variant="outlined"
                   name={`member${index}`}
                   value={member}
                   onChange={(e) => handleChange(e, index)}
+                  disabled={index===0}
                   required
                 />
               </Grid>

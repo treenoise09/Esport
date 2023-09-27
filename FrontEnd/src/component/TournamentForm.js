@@ -347,7 +347,6 @@ function TournamentForm({ onSubmit, initialData }) {
               required
             >
               <MenuItem value="Single Elimination">Single Elimination</MenuItem>
-              <MenuItem value="Double Elimination">Double Elimination</MenuItem>
               {/* Add other conditions as needed */}
             </Select>
           </FormControl>

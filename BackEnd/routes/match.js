@@ -6,12 +6,10 @@ const router = express.Router();
 
 // Middleware for input validation for creating/updating a match
 const matchValidation = [
-    body('result').notEmpty().withMessage('Result is required'),
-    body('schedule_id').isInt().withMessage('Schedule ID must be a valid integer'),
-    body('team1_id').isInt().withMessage('Team 1 ID must be a valid integer'),
-    body('team1_score').isInt().withMessage('Team 1 Score must be a valid integer'),
-    body('team2_id').isInt().withMessage('Team 2 ID must be a valid integer'),
-    body('team2_score').isInt().withMessage('Team 2 Score must be a valid integer'),
+    body('winner_id').isInt().withMessage('Winner ID must be a valid integer'),
+    body('winner_score').isInt().withMessage('Winner Score must be a valid integer'),
+    body('loser_id').isInt().withMessage('Loser ID must be a valid integer'),
+    body('loser_score').isInt().withMessage('Loser Score must be a valid integer'),
 ];
 /**
  * @swagger
@@ -57,8 +55,8 @@ router.post('/', matchValidation, async (req, res) => {
     const conn = await pool.getConnection();
     try {
        
-        await conn.query("INSERT INTO Match_db (result, schedule_id, team1_id, team1_score, team2_id, team2_score) VALUES (?, ?, ?, ?, ?, ?)", 
-        [req.body.result, req.body.schedule_id, req.body.team1_id, req.body.team1_score, req.body.team2_id, req.body.team2_score]);
+        await conn.query("INSERT INTO Match_db (  winner_id, winner_score, loser_id, loser_score) VALUES (?, ?, ?, ?, ?)", 
+        [ req.body.winner_id, req.body.winner_score, req.body.loser_id, req.body.loser_score]);
         res.status(201).send({message:'Match created successfully!'});
     } catch (error) {
         console.error(error);
@@ -205,8 +203,8 @@ router.put('/:id', matchValidation, async (req, res) => {
     }
 
     try {
-        const result = await conn.query("UPDATE Match_db SET result = ?, schedule_id = ?, team1_id = ?, team1_score = ?, team2_id = ?, team2_score = ? WHERE match_id = ?", 
-        [req.body.result, req.body.schedule_id, req.body.team1_id, req.body.team1_score, req.body.team2_id, req.body.team2_score, req.params.id]);
+        const result = await conn.query("UPDATE Match_db SET  winner_id = ?, winner_score = ?, loser_id = ?, loser_score = ? WHERE match_id = ?", 
+        [req.body.winner_id, req.body.winner_score, req.body.loser_id, req.body.loser_score, req.params.id]);
         if (result.affectedRows > 0) {
             res.send({message:'Match updated successfully!'});
         } else {

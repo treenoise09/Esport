@@ -36,9 +36,9 @@ const teamAPI = {
   },
 
   // Update a team by ID
-  updateTeam: async (teamId, updatedData) => {
+  updateTeam: async (teamId, updatedData,query='') => {
     try {
-      const response = await axios.put(`${BASE_URL}/teams/${teamId}`, updatedData);
+      const response = await axios.put(`${BASE_URL}/teams/${teamId}${query}`, updatedData);
       return response.data;
     } catch (error) {
       throw error;

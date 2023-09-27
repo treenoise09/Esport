@@ -142,24 +142,6 @@ function AdminNavBar() {
             }}
           >
             <Link
-              to="/admin/Shedule"
-              style={{ textDecoration: "none", color: "white" }}
-            >
-              Schedule
-            </Link>
-          </Button>
-          <Button
-            color="inherit"
-            variant="outlined"
-            sx={{
-              bgcolor: "#FF8C00",
-              color: "#000000",
-              "&:hover": {
-                bgcolor: "#B22222",
-              },
-            }}
-          >
-            <Link
               onClick={signOut}
               style={{ textDecoration: "none", color: "white" }}
             >

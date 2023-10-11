@@ -78,15 +78,16 @@ const RegistrationPage = () => {
   };
   const startTournament = async () => {
     console.log("Start")
-    const positions = [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]
-    const regis_index = [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1]
+    const positions = [...Array(8).keys()].flatMap(pos => [pos, pos]);
+    shuffle(positions);
+    
 
     try {
-      const updatedRegistrations = registrations.map((registration,index) => ({
+      const updatedRegistrations = registrations.map((registration, index) => ({
         ...registration,
         status: "Competing",
         position: positions[index],
-        index:regis_index[index]
+        index: index % 2 // gives 0 for even index and 1 for odd index
       }));
 
       // Assuming you have an API function to bulk update registrations
@@ -99,6 +100,12 @@ const RegistrationPage = () => {
       console.error("Error starting the tournament:", error);
     }
   };
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
 
   return (
     <Container sx={{padding:'10px'}}>

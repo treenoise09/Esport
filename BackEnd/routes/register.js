@@ -53,6 +53,12 @@ router.post("/", registerValidation, async (req, res) => {
   }
   const conn = await pool.getConnection();
   try {
+    const register_count = await conn.query("SELECT COUNT(tour_id) as count FROM Register WHERE Register.tour_id = ? ",[req.body.tour_id])
+    console.log(register_count)
+    if(register_count[0].count >= 16){
+      res.status(403).send({message: "Can not register this tournament. Team is full."})
+      throw new Error("Team is full")
+    }
     await conn.query("INSERT INTO Register (team_id, tour_id) VALUES (?, ?)", [
       req.body.team_id,
       req.body.tour_id,
@@ -291,13 +297,13 @@ router.put("/bulk/update", async (req, res) => {
   const conn = await pool.getConnection();
   try {
     const registrations = req.body;
-
+    console.log(registrations)
     // Start a transaction
     await conn.beginTransaction();
 
     for (const registration of registrations) {
       await conn.query(
-        "UPDATE Register SET status = ?, position = ?,index = ? WHERE register_id = ?",
+        "UPDATE Register SET Register.status = ?, Register.position = ?, Register.index = ? WHERE Register.register_id = ?",
         [
           registration.status,
           registration.position,

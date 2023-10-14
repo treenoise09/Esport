@@ -34,9 +34,10 @@ export default function Profile() {
   const fetchMember = async () => {
     try {
       const response = await MemberAPI.getMemberById(id);
-      const res = await teamAPI.getTeamById(response.team_id);
-      setTeam(res.data);
-      console.log(res)
+      if(response.team_id !== null){
+        const res = await teamAPI.getTeamById(response.team_id);
+        setTeam(res.data);
+      }
       setMembers(response);
     } catch (error) {
       console.error("Failed to fetch members:", error);

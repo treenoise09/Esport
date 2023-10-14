@@ -165,9 +165,14 @@ router.get("/:id", async (req, res) => {
     const tournament = await conn.query(
       "SELECT * FROM Tournament LEFT JOIN image_table ON Tournament.tour_id = image_table.tableId  AND image_table.tableName = 'tournament' WHERE Tournament.tour_id = ?",
       [req.params.id]
+
     );
+    const teamTotal = await conn.query(
+      "SELECT count(tour_id) as count FROM Register WHERE tour_id = ?",[req.params.id]
+    )
+    BigInt.prototype.toJSON = function() { return this.toString() }
     if (tournament.length > 0) {
-      res.json({ data: tournament[0] });
+      res.status(200).send({ data: tournament[0],teamCount : teamTotal[0].count });
     } else {
       res.status(404).send({ message: "Tournament not found" });
     }

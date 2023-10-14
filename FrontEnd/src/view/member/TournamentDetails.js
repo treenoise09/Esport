@@ -192,7 +192,7 @@ export default function TournamentDetails() {
                     type="submit"
                     fullWidth
                     variant="contained"
-                    disabled={!hasTeam} // Disable the button if the user doesn't have a team
+                    disabled={!hasTeam || tournamentData.teamCount >= 16} // Disable the button if the user doesn't have a team
                     sx={{
                       mt: 3,
                       mb: 2,
@@ -206,7 +206,7 @@ export default function TournamentDetails() {
                       },
                     }}
                   >
-                    Register
+                    {`${tournamentData.teamCount >= 16 ? 'This tournament is full.' : 'Register'}`}
                   </Button>
                 </div>
               </Box>

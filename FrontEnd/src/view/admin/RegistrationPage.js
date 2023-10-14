@@ -78,7 +78,7 @@ const RegistrationPage = () => {
   };
   const startTournament = async () => {
     console.log("Start")
-    const positions = [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7]
+    const positions = [...Array(8).keys()].flatMap(pos => [pos, pos]);
     const regis_index = [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1]
 
     try {

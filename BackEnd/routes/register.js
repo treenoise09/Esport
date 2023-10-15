@@ -234,7 +234,7 @@ router.put("/:id", registerValidation, async (req, res) => {
 
   try {
     const result = await conn.query(
-      "UPDATE Register SET team_id = ?, tour_id = ?,status = ?, `round` = ?,`index` = ?  WHERE register_id = ?",
+      "UPDATE Register SET Register.team_id = ?, Register.tour_id = ?,Register.status = ?, Register.round = ?,Register.index = ?  WHERE Register.register_id = ?",
       [
         req.body.team_id,
         req.body.tour_id,
